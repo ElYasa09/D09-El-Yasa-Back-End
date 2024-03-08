@@ -21,7 +21,7 @@ jobs:
 
       - name: Grant execute permission to gradlew script
         run: |
-          chmod +x beritas/gradlew
+          chmod +x berita/gradlew
 
       - name: Build with Gradle
         run: |
