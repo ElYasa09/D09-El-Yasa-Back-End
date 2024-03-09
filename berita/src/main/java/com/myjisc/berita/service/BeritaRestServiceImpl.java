@@ -67,7 +67,7 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public Berita updateRestBerita(Berita beritaFromDTO) throws NoSuchObjectException {
-        var berita = getRestBeritaById(beritaFromDTO.getIdBerita());
+        var berita = beritaDb.findByIdBeritaAndIsDeletedFalse(beritaFromDTO.getIdBerita());
         if (berita == null) {
             throw new NoSuchObjectException("Berita not found");
         } else {
@@ -82,7 +82,7 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public Berita updateRestBerita(Berita beritaFromDTO, MultipartFile file) throws IOException {
-        var berita = getRestBeritaById(beritaFromDTO.getIdBerita());
+        var berita = beritaDb.findByIdBeritaAndIsDeletedFalse(beritaFromDTO.getIdBerita());
         if (berita == null) {
             throw new NoSuchObjectException("Berita not found");
         } else {
