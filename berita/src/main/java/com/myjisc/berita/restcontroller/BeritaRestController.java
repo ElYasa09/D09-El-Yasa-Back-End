@@ -190,7 +190,7 @@ public class BeritaRestController {
 
             if (berita == null) {
                 Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("message", "Artikel not found");
+                responseBody.put("message", "Berita not found");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
             }
 

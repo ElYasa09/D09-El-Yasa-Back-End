@@ -102,7 +102,7 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public byte[] getImageBerita (Long id) throws NoSuchObjectException {
-        var berita = beritaDb.findById(id).get();
+        var berita = beritaDb.findByIdBeritaAndIsDeletedFalse(id);
 
         if (berita != null ) {
             byte[] image = imageUtilService.decompressImage(berita.getImageBerita());
