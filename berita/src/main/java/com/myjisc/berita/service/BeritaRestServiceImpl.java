@@ -31,6 +31,10 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public Berita createRestBerita(Berita berita, MultipartFile file) throws IOException {
+        if (!checkFile(file)) {
+            throw new IOException("File is not an image");
+        }
+        
         berita.setImageBerita(setRestBeritaImage(berita, file));
         beritaDb.save(berita);
         return berita;
@@ -52,12 +56,7 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public Berita getRestBeritaById(long id) {
-        for (Berita berita : retrieveRestAllBerita()) {
-            if (berita.getIdBerita() == id) {
-                return berita;
-            }
-        }
-        return null;
+        return beritaDb.findByIdBeritaAndIsDeletedFalse(id);
     }
 
     @Override
@@ -87,6 +86,9 @@ public class BeritaRestServiceImpl implements BeritaRestService{
         if (berita == null) {
             throw new NoSuchObjectException("Berita not found");
         } else {
+            if (!checkFile(file)) {
+                throw new IOException("File is not an image");
+            }
 
             berita.setJudulBerita(beritaFromDTO.getJudulBerita());
             berita.setIsiBerita(beritaFromDTO.getIsiBerita());
@@ -104,9 +106,20 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
         if (berita != null ) {
             byte[] image = imageUtilService.decompressImage(berita.getImageBerita());
+
+            if (image == null) {
+                throw new NoSuchObjectException("Image Not Found");
+            }
+
             return image;
         } else {
             throw new NoSuchObjectException("Berita Not Found");
         }
+    }
+
+    @Override 
+    public boolean checkFile(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png");
     }
 }

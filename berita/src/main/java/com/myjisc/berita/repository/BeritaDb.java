@@ -11,4 +11,5 @@ import java.util.List;
 @Transactional
 public interface BeritaDb extends JpaRepository<Berita, Long> {
     List<Berita> findByIsDeletedFalse();
+    Berita findByIdBeritaAndIsDeletedFalse(Long idBerita);
 }

@@ -19,4 +19,5 @@ public interface BeritaRestService {
     Berita updateRestBerita(Berita beritaFromDTO, MultipartFile file) throws IOException;
     byte[] setRestBeritaImage(Berita berita, MultipartFile file) throws IOException;
     byte[] getImageBerita (Long id) throws NoSuchObjectException;
+    boolean checkFile(MultipartFile file) throws IOException;
 }
