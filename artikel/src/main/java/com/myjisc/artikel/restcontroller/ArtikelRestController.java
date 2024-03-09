@@ -143,27 +143,28 @@ public class ArtikelRestController {
         }
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity viewArtikel(@PathVariable("id") String idArtikel) {
         try {
             var artikel = artikelRestService.getArtikelByID(idArtikel);
-
+    
             if (artikel == null) {
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("message", "Artikel not found");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+                Map<String, String> responseBody = new HashMap<>();
+                responseBody.put("status", "success");
+                responseBody.put("data", "");
+                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
             }
-
+    
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
             responseBody.put("data", artikel);
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
-            Map<String, Object> responseBody = new HashMap<>();
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("status", "error");
             responseBody.put("message", "Unable communicate with database");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
-    
 }
