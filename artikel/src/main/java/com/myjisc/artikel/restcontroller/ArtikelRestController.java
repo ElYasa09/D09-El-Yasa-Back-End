@@ -149,10 +149,9 @@ public class ArtikelRestController {
             var artikel = artikelRestService.getArtikelByID(idArtikel);
     
             if (artikel == null) {
-                Map<String, String> responseBody = new HashMap<>();
-                responseBody.put("status", "success");
-                responseBody.put("data", "");
-                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Artikel not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
             }
     
             Map<String, Object> responseBody = new HashMap<>();
