@@ -73,20 +73,21 @@ public class BeritaRestController {
 
     @GetMapping("/view-all")
     public ResponseEntity viewAllBerita() {
+
+        List<Berita> listAvailableBerita = beritaRestService.retrieveRestAvailableBerita();
+
+        if (listAvailableBerita.isEmpty()) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Data not found");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+
         try {
-            List<Berita> listAvailableBerita = beritaRestService.retrieveRestAvailableBerita();
-
-            if (listAvailableBerita.isEmpty()) {
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("message", "Data not found");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-            }
-
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
 
             Map<String, List<Berita>> data = new HashMap<>();
-            data.put("list", listAvailableBerita);
+            data.put("berita", listAvailableBerita);
 
             responseBody.put("data", data);
 
