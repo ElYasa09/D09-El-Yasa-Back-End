@@ -143,7 +143,7 @@ public class ArtikelRestController {
         }
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity viewArtikel(@PathVariable("id") String idArtikel) {
         try {
             var artikel = artikelRestService.getArtikelByID(idArtikel);
@@ -167,4 +167,5 @@ public class ArtikelRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
+    
 }
