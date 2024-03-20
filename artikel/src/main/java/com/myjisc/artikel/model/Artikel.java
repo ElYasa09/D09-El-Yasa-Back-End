@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -37,5 +38,8 @@ public class Artikel {
 
    @Column(name = "is_deleted")
    private boolean isDeleted = false;
+
+   @Column(name = "date_created")
+   private Date dateCreated;
 
 }

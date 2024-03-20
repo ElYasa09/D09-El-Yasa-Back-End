@@ -11,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.util.List;
+import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @Transactional
@@ -35,6 +38,8 @@ public class ArtikelRestService {
     }
 
     public Artikel createRestArtikel (Artikel artikel) {
+        var timeNow = LocalDateTime.now();
+        artikel.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
         artikelDb.save(artikel);
         return  artikel;
     }
@@ -42,8 +47,10 @@ public class ArtikelRestService {
     public Artikel createRestArtikel (Artikel artikel, MultipartFile file) throws IOException {
         if (checkFile(file)) {
             artikel.setImageArtikel(imageUtil.compressImage(file.getBytes()));
+            var timeNow = LocalDateTime.now();
+            artikel.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
             artikelDb.save(artikel);
-            return  artikel;
+            return artikel;
         } else {
             throw new IOException("File is not an image");
         }
