@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/artikel")
 public class ArtikelRestController {
