@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -41,14 +42,24 @@ public class ArtikelRestController {
         }
 
         try {
+            List<Map<String, Object>> artikelDataList = new ArrayList<>();
+            for (Artikel artikel : listArtikel) {
+                Map<String, Object> artikelData = new HashMap<>();
+                artikelData.put("idArtikel", artikel.getIdArtikel());
+                artikelData.put("judulArtikel", artikel.getJudulArtikel());
+                artikelData.put("isiArtikel", artikel.getIsiArtikel());
+                artikelData.put("imageArtikel", "/api/artikel/" + artikel.getIdArtikel() + "/image");
+                artikelData.put("kategori", artikel.getKategori());
+                artikelData.put("dateCreated", artikel.getDateCreated());
+                artikelData.put("deleted", artikel.isDeleted());
+    
+                artikelDataList.add(artikelData);
+            }
+    
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
-
-            Map<String, List<Artikel>> data = new HashMap<>();
-            data.put("artikel", listArtikel);
-
-            responseBody.put("data", data);
-
+            responseBody.put("data", artikelDataList);
+    
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
@@ -78,7 +89,7 @@ public class ArtikelRestController {
 
     @PostMapping(value = "/create")
     public ResponseEntity restCreateArtikel(@Valid @RequestBody @ModelAttribute CreateArtikelRequestDTO createArtikelDTO,
-                                            @RequestPart(value = "image", required = false)MultipartFile file, BindingResult bindingResult) throws IOException {
+                                            @RequestPart(value = "image", required = false) MultipartFile file, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasFieldErrors()) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "fail");
@@ -94,7 +105,17 @@ public class ArtikelRestController {
 
                     Map<String, Object> responseBody = new HashMap<>();
                     responseBody.put("status", "success");
-                    responseBody.put("data", artikel);
+                    
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("idArtikel", artikel.getIdArtikel());
+                    data.put("judulArtikel", artikel.getJudulArtikel());
+                    data.put("isiArtikel", artikel.getIsiArtikel());
+                    data.put("imageArtikel", "image success uploaded");
+                    data.put("kategori", artikel.getKategori());
+                    data.put("dateCreated", artikel.getDateCreated());
+                    data.put("deleted", artikel.isDeleted());
+
+                    responseBody.put("data", data);
 
                     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
 
@@ -156,7 +177,18 @@ public class ArtikelRestController {
     
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
-            responseBody.put("data", artikel);
+            
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("idArtikel", artikel.getIdArtikel());
+            data.put("judulArtikel", artikel.getJudulArtikel());
+            data.put("isiArtikel", artikel.getIsiArtikel());
+            data.put("imageArtikel", "/api/artikel/" + artikel.getIdArtikel() + "/image");
+            data.put("kategori", artikel.getKategori());
+            data.put("dateCreated", artikel.getDateCreated());
+            data.put("deleted", artikel.isDeleted());
+
+            responseBody.put("data", data);
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
