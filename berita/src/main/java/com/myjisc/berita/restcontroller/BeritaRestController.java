@@ -1,6 +1,7 @@
 package com.myjisc.berita.restcontroller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,17 @@ public class BeritaRestController {
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("status", "success");
     
-                responseBody.put("data", berita);
+                Map<String, Object> data = new HashMap<>();
+                data.put("idBerita", berita.getIdBerita());
+                data.put("judulBerita", berita.getJudulBerita());
+                data.put("isiBerita", berita.getIsiBerita());
+                data.put("imageBerita", "image successfully uploaded");
+                data.put("kategori", berita.getKategori());
+                data.put("dateCreated", berita.getDateCreated());
+                data.put("dateUpdated", berita.getDateUpdated());
+                data.put("deleted", berita.isDeleted());
+
+                responseBody.put("data", data);
     
                 return ResponseEntity.status(HttpStatus.OK).body(responseBody);
             } else {
@@ -83,13 +94,24 @@ public class BeritaRestController {
         }
 
         try {
+            List<Map<String, Object>> beritaDataList = new ArrayList<>();
+            for (Berita berita : listAvailableBerita) {
+                Map<String, Object> beritaData = new HashMap<>();
+                beritaData.put("idBerita", berita.getIdBerita());
+                beritaData.put("judulBerita", berita.getJudulBerita());
+                beritaData.put("isiBerita", berita.getIsiBerita());
+                beritaData.put("imageBerita", "/api/berita/" + berita.getIdBerita() + "/image");
+                beritaData.put("kategori", berita.getKategori());
+                beritaData.put("dateCreated", berita.getDateCreated());
+                beritaData.put("dateUpdated", berita.getDateUpdated());
+                beritaData.put("deleted", berita.isDeleted());
+    
+                beritaDataList.add(beritaData);
+            }
+    
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
-
-            Map<String, List<Berita>> data = new HashMap<>();
-            data.put("berita", listAvailableBerita);
-
-            responseBody.put("data", data);
+            responseBody.put("data", beritaDataList);
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
@@ -113,7 +135,17 @@ public class BeritaRestController {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
 
-            responseBody.put("data", berita);
+            Map<String, Object> data = new HashMap<>();
+            data.put("idBerita", berita.getIdBerita());
+            data.put("judulBerita", berita.getJudulBerita());
+            data.put("isiBerita", berita.getIsiBerita());
+            data.put("imageBerita", "/api/berita/" + berita.getIdBerita() + "/image");
+            data.put("kategori", berita.getKategori());
+            data.put("dateCreated", berita.getDateCreated());
+            data.put("dateUpdated", berita.getDateUpdated());
+            data.put("deleted", berita.isDeleted());
+
+            responseBody.put("data", data);
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
@@ -142,7 +174,17 @@ public class BeritaRestController {
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("status", "success");
     
-                responseBody.put("data", berita);
+                Map<String, Object> data = new HashMap<>();
+                data.put("idBerita", berita.getIdBerita());
+                data.put("judulBerita", berita.getJudulBerita());
+                data.put("isiBerita", berita.getIsiBerita());
+                data.put("imageBerita", "image successfully uploaded");
+                data.put("kategori", berita.getKategori());
+                data.put("dateCreated", berita.getDateCreated());
+                data.put("dateUpdated", berita.getDateUpdated());
+                data.put("deleted", berita.isDeleted());
+
+                responseBody.put("data", data);
     
                 return ResponseEntity.status(HttpStatus.OK).body(responseBody);
             } else {

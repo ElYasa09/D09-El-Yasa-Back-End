@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -41,6 +42,13 @@ public class Berita {
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted=false;
+
+    @Column(name = "date_created")
+    private Date dateCreated;
+
+    @Column(name = "date_updated")
+    private Date dateUpdated;
+
 
 }
 

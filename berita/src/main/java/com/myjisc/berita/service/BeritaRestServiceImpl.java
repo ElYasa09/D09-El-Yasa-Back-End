@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.rmi.NoSuchObjectException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,6 +28,9 @@ public class BeritaRestServiceImpl implements BeritaRestService{
 
     @Override
     public Berita createRestBerita(Berita berita) {
+        var timeNow = LocalDateTime.now();
+        berita.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
+        berita.setDateUpdated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
         beritaDb.save(berita);
         return berita;
     }
@@ -35,7 +41,11 @@ public class BeritaRestServiceImpl implements BeritaRestService{
             throw new IOException("File is not an image");
         }
         
+        var timeNow = LocalDateTime.now();
+
         berita.setImageBerita(setRestBeritaImage(berita, file));
+        berita.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
+        berita.setDateUpdated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
         beritaDb.save(berita);
         return berita;
     }
@@ -71,6 +81,8 @@ public class BeritaRestServiceImpl implements BeritaRestService{
         if (berita == null) {
             throw new NoSuchObjectException("Berita not found");
         } else {
+            var timeNow = LocalDateTime.now();
+            berita.setDateUpdated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
             berita.setJudulBerita(beritaFromDTO.getJudulBerita());
             berita.setIsiBerita(beritaFromDTO.getIsiBerita());
             berita.setKategori(beritaFromDTO.getKategori());
@@ -89,7 +101,8 @@ public class BeritaRestServiceImpl implements BeritaRestService{
             if (!checkFile(file)) {
                 throw new IOException("File is not an image");
             }
-
+            var timeNow = LocalDateTime.now();
+            berita.setDateUpdated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
             berita.setJudulBerita(beritaFromDTO.getJudulBerita());
             berita.setIsiBerita(beritaFromDTO.getIsiBerita());
             berita.setImageBerita(setRestBeritaImage(beritaFromDTO, file));
