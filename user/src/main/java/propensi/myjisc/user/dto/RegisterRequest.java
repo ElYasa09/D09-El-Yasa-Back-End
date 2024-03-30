@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-  private Long id;
+  private UUID id;
   private String firstname;
   private String lastname;
   private String username;

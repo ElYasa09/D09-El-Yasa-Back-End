@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import propensi.myjisc.user.dto.AuthRequestDTO;
 import propensi.myjisc.user.dto.AuthResponseDTO;
 import propensi.myjisc.user.dto.RegisterRequest;
+import propensi.myjisc.user.model.Role;
 import propensi.myjisc.user.model.User;
 import propensi.myjisc.user.repository.UserRepository;
 
@@ -31,13 +32,12 @@ public class AuthService {
             throw new RuntimeException("Email already in use");
         }
         var user = User.builder()
-        // .id(request.getId())
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
         .username(request.getUsername())
         .email(request.getEmail())
         .password(encode(request.getPassword()))
-        .role(request.getRole())
+        .role(Role.ADMIN)
         .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
