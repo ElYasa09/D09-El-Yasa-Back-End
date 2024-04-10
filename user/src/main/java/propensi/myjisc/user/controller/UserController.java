@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,6 +76,21 @@ public class UserController {
             // print the exception message to console
             System.err.println("Error updating user: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/user/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        try {
+            User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    
+            user.setDeleted(true);
+            userRepository.save(user);
+    
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

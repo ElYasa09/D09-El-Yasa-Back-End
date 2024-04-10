@@ -54,6 +54,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted; // Flag for soft delete
     
 
     @Override
