@@ -28,7 +28,7 @@ public class AuthService {
     private  AuthenticationManager authenticationManager;
     
     public AuthResponseDTO register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
         var user = User.builder()

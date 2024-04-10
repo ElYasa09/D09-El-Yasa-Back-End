@@ -1,22 +1,31 @@
 package propensi.myjisc.user.service;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
 import propensi.myjisc.user.dto.RegisterRequest;
+import propensi.myjisc.user.dto.UserResponseDTO;
+import propensi.myjisc.user.dto.EditUserRequestDTO;
 import propensi.myjisc.user.model.User;
 import propensi.myjisc.user.repository.UserRepository;
 
+@Service
 public class UserService {
 
     private  UserRepository userRepository;
     
-    public void updateUser(RegisterRequest registerRequest) {
-        User user = userRepository.findByEmail(registerRequest.getEmail())
-        .orElseThrow(() -> new RuntimeException("User not found"));
-
-    user.setUsername(registerRequest.getUsername());
-    user.setEmail(registerRequest.getEmail());
-    // update other fields...
-
-    userRepository.save(user);
+    public void updateUser(Long id, EditUserRequestDTO editRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        // Update user properties
+        user.setFirstname(editRequest.getFirstname());
+    
+        userRepository.save(user);
     }
 
     public void deleteUser(String email) {
@@ -32,6 +41,23 @@ public class UserService {
 
         user.setPassword(newPassword);
         userRepository.save(user);
+    }
+
+    // public void userDetails(String email) {
+    //     User user = userRepository.findByEmail(email)
+    //     .orElseThrow(() -> new RuntimeException("User not found"));
+
+        
+    // }
+
+    public UserResponseDTO getUserDetails(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    
+        UserResponseDTO response = new UserResponseDTO();
+        response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
+        return response;
     }
 
     
