@@ -25,7 +25,9 @@ import com.myjisc.kelas.dto.request.UpdateKelasRequestDTO;
 import com.myjisc.kelas.dto.request.UpdateMapelRequestDTO;
 import com.myjisc.kelas.model.Kelas;
 import com.myjisc.kelas.model.MataPelajaran;
+import com.myjisc.kelas.repository.KontenMapelDb;
 import com.myjisc.kelas.service.KelasRestService;
+import com.myjisc.kelas.service.KontenMapelRestService;
 import com.myjisc.kelas.service.MataPelajaranRestService;
 
 import jakarta.validation.Valid;
@@ -50,6 +52,12 @@ public class KelasRestController {
 
     @Autowired
     MataPelajaranMapper mataPelajaranMapper;
+
+    @Autowired
+    KontenMapelRestService kontenMapelRestService;
+
+    @Autowired
+    KontenMapelDb kontenMapelDb;
 
     @PostMapping("/create")
     public ResponseEntity createKelas(@Valid @RequestBody CreateKelasRequestDTO KelasRequestDTO, BindingResult bindingResult) {

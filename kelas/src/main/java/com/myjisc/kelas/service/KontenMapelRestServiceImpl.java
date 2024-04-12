@@ -12,4 +12,5 @@ import jakarta.transaction.Transactional;
 public class KontenMapelRestServiceImpl implements KontenMapelRestService{
     @Autowired
     private KontenMapelDb kontenMapelDb;
+    
 }
