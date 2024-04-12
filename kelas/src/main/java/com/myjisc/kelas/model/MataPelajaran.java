@@ -34,8 +34,4 @@ public class MataPelajaran {
 
     @OneToMany(mappedBy = "mataPelajaran", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<KontenMapel> listKontenMapel;
-
-    @NotNull
-    @Column(name = "is_deleted")
-    private boolean isDeleted = false;
 }

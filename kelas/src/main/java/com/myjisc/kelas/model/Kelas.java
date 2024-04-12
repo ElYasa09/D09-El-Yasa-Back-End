@@ -30,8 +30,8 @@ public class Kelas {
     private String deskripsiKelas;
 
     @NotNull
-    @Column(name = "nuptk_guru", nullable = false)
-    private Long nuptkGuru;
+    @Column(name = "nuptk_walikelas", nullable = false)
+    private Long nuptkWaliKelas;
 
     @NotNull
     @Column(name = "daftar_nisn_siswa")
