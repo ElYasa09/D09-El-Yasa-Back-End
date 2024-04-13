@@ -79,7 +79,6 @@ public class KelasRestServiceImpl implements KelasRestService {
                     return kelas;
                 }
             }
-            throw new NoResultException("Cant find kelas");
         }
 
         return null;

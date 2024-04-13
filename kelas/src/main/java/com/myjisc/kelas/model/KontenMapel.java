@@ -24,12 +24,16 @@ public class KontenMapel {
     @Column(name = "judul_konten", nullable = false)
     private String judulKonten;
 
-    @NotNull
-    @Column(name = "nama_file", nullable = false)
+    @Column(name = "isi_konten")
+    private String isiKonten;
+
+    @Column(name = "nama_file")
     private String namaFile;
 
+    @Column(name = "tipe_file")
+    private String tipeFile;
+
     @Lob
-    @Basic(fetch = FetchType.EAGER)
     @Column(name = "file_konten")
     private byte[] fileKonten;
 

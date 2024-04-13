@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateKontenMapel {
+public class CreateKontenMapelRequestDTO {
     private String judulKonten;
+    private String isiKonten;
 }
