@@ -27,7 +27,7 @@ public class AuthService {
     @Autowired
     private  AuthenticationManager authenticationManager;
     
-    public AuthResponseDTO register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
@@ -40,10 +40,8 @@ public class AuthService {
         .role(Role.ADMIN)
         .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponseDTO.builder()
-            .token(jwtToken)
-            .build();
+        // var jwtToken = jwtService.generateToken(user);
+        return user;
         
         
     }
