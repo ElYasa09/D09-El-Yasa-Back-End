@@ -271,6 +271,68 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
+
+    @GetMapping("/guru/{idGuru}")
+    public ResponseEntity viewAllKelasDiajarByIdGuru(@PathVariable("idGuru") Long idGuru) {
+        
+        List<Kelas> listAvailableKelas = kelasRestService.getRestKelasByIdGuru(idGuru);
+
+        if (listAvailableKelas.isEmpty()) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Data not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+        }
+
+        try {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+    
+            List<Map<String, Object>> dataList = new ArrayList<>();
+    
+            for (Kelas kelas : listAvailableKelas) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("idKelas", kelas.getIdKelas());
+                data.put("namaKelas", kelas.getNamaKelas());
+                data.put("deskripsiKelas", kelas.getDeskripsiKelas());
+                data.put("nuptkWaliKelas", kelas.getNuptkWaliKelas());
+                data.put("nisnSiswa", kelas.getNisnSiswa());
+    
+                List<UUID> listUUIDMapel = new ArrayList<>();
+    
+                if (!kelas.getListMataPelajaran().isEmpty()) {
+                    for (MataPelajaran mapel : kelas.getListMataPelajaran()) {
+                        listUUIDMapel.add(mapel.getIdMapel());
+                    }
+                    data.put("listMataPelajaran", listUUIDMapel);
+                } else {
+                    data.put("listMataPelajaran", null);
+                }
+    
+                data.put("isDeleted", kelas.isDeleted());
+                
+                List<UUID> listUUIDAbsensi = new ArrayList<>();
+
+                if (!kelas.getAbsensiList().isEmpty()) {
+                    for (Absensi absensi : kelas.getAbsensiList()) {
+                        listUUIDAbsensi.add(absensi.getIdAbsen());
+                    }
+                    data.put("absensiList", listUUIDAbsensi);
+                } else {
+                    data.put("absensiList", null);
+                }
+    
+                dataList.add(data);
+            }
+    
+            responseBody.put("data", dataList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Unable communicate with database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
     
     @PutMapping("/update/{idKelas}")
     public ResponseEntity updateKelas(@PathVariable("idKelas") String idKelas, 
