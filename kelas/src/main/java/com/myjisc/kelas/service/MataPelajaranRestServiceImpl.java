@@ -39,7 +39,7 @@ public class MataPelajaranRestServiceImpl implements MataPelajaranRestService {
     }
 
     public MataPelajaran getRestMataPelajaranByIdMataPelajaran(UUID idMataPelajaran) { 
-        return mataPelajaranDb.findById(idMataPelajaran).get();
+        return mataPelajaranDb.findById(idMataPelajaran).orElse(null);
     }
 
     public Kelas getRestKelasByIdMataPelajaran(UUID idMataPelajaran) {

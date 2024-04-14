@@ -14,4 +14,5 @@ public interface KelasRestService {
     Kelas getRestKelasByIdKelas(UUID idKelas);
     void deleteRestKelas(UUID idKelas) throws NoSuchObjectException;
     Kelas getRestKelasByIdSiswa(Long idSiswa);
+    List<Kelas> getRestKelasByIdGuru(Long idGuru);
 }
