@@ -1,6 +1,7 @@
 package com.myjisc.kelas.service;
 
 import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myjisc.kelas.model.Kelas;
+import com.myjisc.kelas.model.MataPelajaran;
 import com.myjisc.kelas.repository.KelasDb;
 
-import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -73,7 +74,7 @@ public class KelasRestServiceImpl implements KelasRestService {
     @Override
     public Kelas getRestKelasByIdSiswa(Long idSiswa) {
         List<Kelas> listKelasExisting = kelasDb.findByIsDeletedFalse();
-        if (idSiswa != null) {
+        if (!listKelasExisting.isEmpty()) {
             for (Kelas kelas : listKelasExisting) {
                 if (kelas.getNisnSiswa().contains(idSiswa)) {
                     return kelas;
@@ -82,5 +83,24 @@ public class KelasRestServiceImpl implements KelasRestService {
         }
 
         return null;
+    }
+
+    public List<Kelas> getRestKelasByIdGuru(Long idGuru) {
+        List<Kelas> listExistingKelas = kelasDb.findByIsDeletedFalse();
+        List<Kelas> listKelasDiajar = new ArrayList<>();
+        
+        if (!listExistingKelas.isEmpty()) {
+            for (Kelas kelas : listExistingKelas) {
+                List<MataPelajaran> mataPelajaranList = kelas.getListMataPelajaran();
+                for (MataPelajaran mataPelajaran : mataPelajaranList) {
+                    if (mataPelajaran.getNuptkGuruMengajar().equals(idGuru)) {
+                        listKelasDiajar.add(kelas);
+                        break; // No need to continue searching for this class
+                    }
+                }
+            }
+        }
+        
+        return listKelasDiajar;
     }
 }
