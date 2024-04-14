@@ -643,6 +643,7 @@ public class KelasRestController {
 
             Map<String, Object> data = new HashMap<>();
             data.put("idKonten", materi.getIdKonten());
+            data.put("judulKonten", materi.getJudulKonten());
             data.put("isiKonten", materi.getIsiKonten());
             data.put("nama_file", materi.getNamaFile());
             data.put("tipe_file", materi.getTipeFile());
