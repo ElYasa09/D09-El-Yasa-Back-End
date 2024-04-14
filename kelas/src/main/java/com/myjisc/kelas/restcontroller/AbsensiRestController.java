@@ -1,6 +1,7 @@
 package com.myjisc.kelas.restcontroller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,8 @@ public class AbsensiRestController {
             for (var NISNsiswa : kelasAbsensi.getNisnSiswa()) {
                 listNISNSiswa.add(NISNsiswa);
             }
+
+            Collections.sort(listNISNSiswa);
             
             data.put("nisnSiswa", listNISNSiswa);
             data.put("keteranganAbsen", absensi.getKeteranganAbsen());
