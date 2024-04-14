@@ -9,4 +9,5 @@ import com.myjisc.kelas.model.Absensi;
 public interface AbsensiRestService {
     Absensi createRestAbsensi(Absensi absensi);
     List<Absensi> retrieveRestAllAbsensi();
+    Absensi getRestAbsensiByIdAbsensi(UUID idAbsen);
 }

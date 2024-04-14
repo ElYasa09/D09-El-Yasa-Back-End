@@ -28,4 +28,9 @@ public class AbsensiRestServiceImpl implements AbsensiRestService{
         return absensiDb.findAll();
     }  
 
+    @Override
+    public Absensi getRestAbsensiByIdAbsensi(UUID idAbsen) {
+        return absensiDb.findByIdAbsen(idAbsen);
+    }
+
 }

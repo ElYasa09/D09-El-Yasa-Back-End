@@ -12,7 +12,6 @@ import com.myjisc.kelas.model.Kelas;
 @Data
 public class CreateAbsensiRequestDTO {
     private Date tanggalAbsen;
-    private List<Long> nisnSiswa;
     private List<String> keteranganAbsen;
     private Kelas kelas;
 }

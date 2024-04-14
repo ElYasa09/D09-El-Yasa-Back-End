@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.myjisc.kelas.model.Absensi;
 
 public interface AbsensiDb extends JpaRepository<Absensi, UUID>{
-    
+    Absensi findByIdAbsen(UUID idAbsen);
 }
