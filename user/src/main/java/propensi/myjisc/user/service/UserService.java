@@ -50,6 +50,11 @@ public class UserService {
         
     // }
 
+    public User getUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     public UserResponseDTO getUserDetails(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
