@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
-import com.myjisc.kelas.model.Kelas;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +12,4 @@ import com.myjisc.kelas.model.Kelas;
 public class CreateAbsensiRequestDTO {
     private Date tanggalAbsen;
     private List<String> keteranganAbsen;
-    private Kelas kelas;
 }

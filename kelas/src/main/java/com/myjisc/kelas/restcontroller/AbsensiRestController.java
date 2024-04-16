@@ -17,29 +17,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.myjisc.kelas.dto.AbsensiMapper;
 import com.myjisc.kelas.dto.request.CreateAbsensiRequestDTO;
 import com.myjisc.kelas.model.Absensi;
-import com.myjisc.kelas.model.Kelas;
 import com.myjisc.kelas.service.AbsensiRestService;
 import com.myjisc.kelas.service.KelasRestService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/absensi")
 public class AbsensiRestController {
     @Autowired
     private AbsensiRestService absensiRestService;
-    
+
     @Autowired
     AbsensiMapper absensiMapper;
 
     @Autowired
     KelasRestService kelasRestService;
 
-    @PostMapping("/create")
-    public ResponseEntity createAbsensi(@RequestBody CreateAbsensiRequestDTO absensiDTO , BindingResult bindingResult) {
+    @PostMapping("create/{idKelas}")
+    public ResponseEntity createAbsensi(@PathVariable("idKelas") String IdKelas,
+            @Valid @RequestBody CreateAbsensiRequestDTO absensiDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, Object> responseBody = new HashMap<>();
@@ -52,11 +53,18 @@ public class AbsensiRestController {
 
         try {
             var absensiFromDTO = absensiMapper.createAbsensiDTOToAbsensi(absensiDTO);
+            absensiFromDTO.setKelas(kelasRestService.getRestKelasByIdKelas(UUID.fromString(IdKelas)));
+            
+            List<Long> listNISNSiswa = new ArrayList<>();
+            for (var NISNsiswa : absensiFromDTO.getKelas().getNisnSiswa()) {
+                listNISNSiswa.add(NISNsiswa);
+            }
+            Collections.sort(listNISNSiswa);
+            absensiFromDTO.setNisnSiswa(listNISNSiswa);
+            
             var absensi = absensiRestService.createRestAbsensi(absensiFromDTO);
 
-            Kelas kelasAbsensi = kelasRestService.getRestKelasByIdKelas(absensi.getKelas().getIdKelas());
-            
-            if (kelasAbsensi == null) {
+            if (absensi.getKelas() == null) {
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("message", "Data not found");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
@@ -64,36 +72,27 @@ public class AbsensiRestController {
 
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
-
             Map<String, Object> data = new HashMap<>();
             data.put("idAbsen", absensi.getIdAbsen());
             data.put("tanggalAbsen", absensi.getTanggalAbsen());
-            
-            List<Long> listNISNSiswa = new ArrayList<>();
-
-            for (var NISNsiswa : kelasAbsensi.getNisnSiswa()) {
-                listNISNSiswa.add(NISNsiswa);
-            }
-
-            Collections.sort(listNISNSiswa);
-            
             data.put("nisnSiswa", listNISNSiswa);
             data.put("keteranganAbsen", absensi.getKeteranganAbsen());
-            data.put("kelas", absensi.getKelas());
+            data.put("kelas", absensi.getKelas().getIdKelas());
 
             responseBody.put("data", data);
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
+            e.printStackTrace();
             responseBody.put("message", "Check your input again");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
 
-    @GetMapping("/view-all")
-    public ResponseEntity viewAllAbsensi() {
-        List<Absensi> listAbsensi = absensiRestService.retrieveRestAllAbsensi();
+    @GetMapping("/{idKelas}")
+    public ResponseEntity retrieveAbsensiKelas(@PathVariable("idKelas") String idKelas){
+        List<Absensi> listAbsensi = absensiRestService.retrieveRestAllAbsensiByKelas(UUID.fromString(idKelas));
 
         if (listAbsensi.isEmpty()) {
             Map<String, Object> responseBody = new HashMap<>();
@@ -113,7 +112,7 @@ public class AbsensiRestController {
                 data.put("tanggalAbsen", absensi.getTanggalAbsen());
                 data.put("nisnSiswa", absensi.getNisnSiswa());
                 data.put("keteranganAbsen", absensi.getKeteranganAbsen());
-                data.put("kelas", absensi.getKelas());
+                data.put("kelas", absensi.getKelas().getIdKelas());
 
                 listData.add(data);
             }
@@ -125,6 +124,39 @@ public class AbsensiRestController {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("message", "Unable communicate with database");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-        }  
+        }
+    }
+
+    @GetMapping("detail/{idAbsen}")
+    public ResponseEntity retrieveDetailAbsensi(@PathVariable("idAbsen") String idAbsen){
+        Absensi absensi = absensiRestService.getRestAbsensiByIdAbsensi(UUID.fromString(idAbsen));
+
+        System.out.println(absensi);
+
+        if (absensi == null) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Data not found");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+
+        try {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("idAbsen", absensi.getIdAbsen());
+            data.put("tanggalAbsen", absensi.getTanggalAbsen());
+            data.put("nisnSiswa", absensi.getNisnSiswa());
+            data.put("keteranganAbsen", absensi.getKeteranganAbsen());
+            data.put("kelas", absensi.getKelas().getIdKelas());
+
+            responseBody.put("data", data);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Unable communicate with database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
     }
 }
