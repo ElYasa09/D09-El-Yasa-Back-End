@@ -100,7 +100,6 @@ public class KelasRestController {
     
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
-            e.printStackTrace();
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("message", "Check your input again");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
@@ -261,7 +260,6 @@ public class KelasRestController {
 
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
-            e.printStackTrace();
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("message", "Unable communicate with database");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
@@ -491,7 +489,6 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            e.printStackTrace();
             responseBody.put("message", "Unable communicate with database");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
@@ -713,7 +710,6 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            e.printStackTrace();
             responseBody.put("message", "Unable communicate with database");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
