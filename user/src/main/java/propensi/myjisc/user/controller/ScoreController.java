@@ -11,7 +11,11 @@ import propensi.myjisc.user.repository.UserRepository;
 import propensi.myjisc.user.service.ScoreService;
 import propensi.myjisc.user.service.UserService;
 
+import java.lang.annotation.Repeatable;
+import java.rmi.NoSuchObjectException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/score")
@@ -44,7 +51,7 @@ public class ScoreController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Score nilai = scoreService.simpanNilai(nilaiDTO, user);
-        return new ResponseEntity<>(nilai, HttpStatus.CREATED);
+        return new ResponseEntity<>(nilai, HttpStatus.OK);
     }
 
     public User getUserById(Long id) {
@@ -53,22 +60,49 @@ public class ScoreController {
     }
 
     @GetMapping("/scores/{userId}")
-    public ResponseEntity<List<ScoreDTO>> getUserScores(@PathVariable Long userId) {
-        List<ScoreDTO> scores = scoreService.getScoresByUserId(userId);
-        if (scores.isEmpty()) {
+    public ResponseEntity<?> getUserScores(@PathVariable Long userId) throws NoSuchObjectException {
+        Score scores = scoreService.getScoresByUserId(userId);
+        if (scores == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(scores, HttpStatus.OK);
+
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "success");
+        responseBody.put("data", scores);
+
+        return ResponseEntity.ok().body(responseBody);
     }
 
     @PutMapping("/score/update/{id}")
-    public ResponseEntity<ScoreDTO> updateScore(@PathVariable UUID id, @RequestBody ScoreDTO newScoreData) {
-    try {
-        ScoreDTO updatedScore = scoreService.updateScore(id, newScoreData);
-        return ResponseEntity.ok(updatedScore);
-    } catch (RuntimeException e) {
-        return ResponseEntity.notFound().build();
-    }
-}
+    public ResponseEntity<?> updateScore(@PathVariable String id, @RequestBody ScoreDTO newScoreData) {
+        try {
+            scoreService.updateScore(UUID.fromString(id), newScoreData);
+            Map<String, Object> responseBody = new HashMap<>();
+            Score scores = scoreService.getScoreByIdScore(UUID.fromString(id));
+            responseBody.put("message", "success");
+            responseBody.put("data", scores);
 
+        return ResponseEntity.ok().body(responseBody);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+
+    @DeleteMapping("/score/{idScore}")
+    public ResponseEntity<?> deleteScore(@PathVariable String idScore) {
+        try {
+            scoreService.deleteScore(UUID.fromString(idScore));
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Score has been deleted");
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong!");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    } 
 }
