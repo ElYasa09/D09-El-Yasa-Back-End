@@ -2,6 +2,9 @@ package com.myjisc.kelas.service;
 
 import java.io.IOException;
 import java.rmi.NoSuchObjectException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +25,8 @@ public class KontenMapelRestServiceImpl implements KontenMapelRestService{
     
     @Override
     public KontenMapel createRestKontenMapel(KontenMapel kontenMapel) {
+        var timeNow = LocalDateTime.now();
+        kontenMapel.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
         kontenMapelDb.save(kontenMapel);
         return kontenMapel;
     }

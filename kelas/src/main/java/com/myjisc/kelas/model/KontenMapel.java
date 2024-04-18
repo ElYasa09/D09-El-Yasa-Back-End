@@ -1,6 +1,7 @@
 package com.myjisc.kelas.model;
 
 
+import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -36,6 +37,9 @@ public class KontenMapel {
     @Lob
     @Column(name = "file_konten")
     private byte[] fileKonten;
+
+    @Column(name = "created_date", nullable = false)
+    private Date dateCreated;
 
     @ManyToOne
     @JoinColumn(name = "konten_mapel", referencedColumnName = "idMapel")
