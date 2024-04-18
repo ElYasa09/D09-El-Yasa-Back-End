@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ScoreRepository extends JpaRepository<Score, Long> {
+public interface ScoreRepository extends JpaRepository<Score, UUID> {
 
     List<Score> findByUserId(Long userId);
     // Score findByUser(User user);

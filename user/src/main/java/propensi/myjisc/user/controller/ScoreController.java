@@ -13,6 +13,7 @@ import propensi.myjisc.user.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,5 +60,15 @@ public class ScoreController {
         }
         return new ResponseEntity<>(scores, HttpStatus.OK);
     }
+
+    @PutMapping("/score/update/{id}")
+    public ResponseEntity<ScoreDTO> updateScore(@PathVariable UUID id, @RequestBody ScoreDTO newScoreData) {
+    try {
+        ScoreDTO updatedScore = scoreService.updateScore(id, newScoreData);
+        return ResponseEntity.ok(updatedScore);
+    } catch (RuntimeException e) {
+        return ResponseEntity.notFound().build();
+    }
+}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,20 @@ public class ScoreService {
         dto.setListNilai(score.getListNilai());
         return dto;
     }
+
+    public ScoreDTO updateScore(UUID id, ScoreDTO newScoreData) {
+        Score score = scoreRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Score not found"));
+    
+        score.setTipeNilai(newScoreData.getTipeNilai());
+        score.setListNilai(newScoreData.getListNilai());
+    
+        Score updatedScore = scoreRepository.save(score);
+    
+        return mapToScoreResponseDTO(updatedScore);
+    }
+
+
 
     // @Autowired
     // public ScoreService(ScoreRepository scoreRepository, UserService userService) {
