@@ -577,25 +577,32 @@ public class KelasRestController {
         try {
             if (file != null) {
                 var materiFromDTO = kontenMapelMapper.createKontenMapelDTOToKontenMapel(kontenMapelRequestDTO);
-                materiFromDTO.setMataPelajaran(mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel)));
-                var materi = kontenMapelRestService.creteRestKontenMapel(materiFromDTO, file);
+                if (mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel)) != null) {
+                    materiFromDTO.setMataPelajaran(mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel)));
+                    var materi = kontenMapelRestService.creteRestKontenMapel(materiFromDTO, file);
 
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("status", "success");
+                    Map<String, Object> responseBody = new HashMap<>();
+                    responseBody.put("status", "success");
 
-                Map<String, Object> data = new HashMap<>();
-                data.put("idKonten", materi.getIdKonten());
-                data.put("judulKonten", materi.getJudulKonten());
-                data.put("isiKonten", materi.getIsiKonten());
-                data.put("nama_file", materi.getNamaFile());
-                data.put("tipe_file", materi.getTipeFile());
-                data.put("fileKonten", "/get/materi/" + materi.getIdKonten());
-                data.put("mataPelajaran", materi.getMataPelajaran().getIdMapel());
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("idKonten", materi.getIdKonten());
+                    data.put("judulKonten", materi.getJudulKonten());
+                    data.put("isiKonten", materi.getIsiKonten());
+                    data.put("nama_file", materi.getNamaFile());
+                    data.put("tipe_file", materi.getTipeFile());
+                    data.put("fileKonten", "/get/materi/" + materi.getIdKonten());
+                    data.put("mataPelajaran", materi.getMataPelajaran().getIdMapel());
 
-                responseBody.put("data", data);
+                    responseBody.put("data", data);
 
 
-                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                    return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                } else {
+                    Map<String, Object> responseBody = new HashMap<>();
+                    responseBody.put("message", "Mata Pelajaran Not Found");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+                }
+                
             } else {
                 var materiFromDTO = kontenMapelMapper.createKontenMapelDTOToKontenMapel(kontenMapelRequestDTO);
                 materiFromDTO.setMataPelajaran(mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel)));
@@ -606,6 +613,7 @@ public class KelasRestController {
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("idKonten", materi.getIdKonten());
+                data.put("judulKonten", materi.getJudulKonten());
                 data.put("isiKonten", materi.getIsiKonten());
                 data.put("nama_file", null);
                 data.put("tipe_file",null);
@@ -685,6 +693,31 @@ public class KelasRestController {
         }
     }
     
+    @DeleteMapping("/delete/materi/{idMateri}")
+    public ResponseEntity<?> deleteMateri(@PathVariable("idMateri") String idMateri) {
+        try {
+            var materi = kontenMapelRestService.getKontenMapelByIdKonten(UUID.fromString(idMateri));
+
+            if (materi == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Materi Pelajaran not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+
+            kontenMapelRestService.deleteKontenMapel(UUID.fromString(idMateri));
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Materi Pelajaran has been deleted");
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            e.printStackTrace();
+            responseBody.put("message", "Unable communicate with database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
     
     
 }
