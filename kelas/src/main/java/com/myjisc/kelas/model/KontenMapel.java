@@ -1,6 +1,8 @@
 package com.myjisc.kelas.model;
 
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,19 +18,22 @@ import lombok.Setter;
 @Table(name = "konten_mapel")
 public class KontenMapel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idKonten;
+    private UUID idKonten = UUID.randomUUID();
 
     @NotNull
     @Column(name = "judul_konten", nullable = false)
     private String judulKonten;
 
-    @NotNull
-    @Column(name = "isi_konten", nullable = false)
+    @Column(name = "isi_konten")
     private String isiKonten;
 
+    @Column(name = "nama_file")
+    private String namaFile;
+
+    @Column(name = "tipe_file")
+    private String tipeFile;
+
     @Lob
-    @Basic(fetch = FetchType.EAGER)
     @Column(name = "file_konten")
     private byte[] fileKonten;
 

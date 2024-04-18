@@ -2,12 +2,10 @@ package com.myjisc.kelas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,8 +30,8 @@ public class Kelas {
     private String deskripsiKelas;
 
     @NotNull
-    @Column(name = "nuptk_guru", nullable = false)
-    private Long nuptkGuru;
+    @Column(name = "nuptk_walikelas", nullable = false)
+    private Long nuptkWaliKelas;
 
     @NotNull
     @Column(name = "daftar_nisn_siswa")
@@ -45,5 +43,8 @@ public class Kelas {
     @NotNull
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "kelas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Absensi> absensiList;
 
 }
