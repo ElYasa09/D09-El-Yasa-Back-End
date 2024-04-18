@@ -3,7 +3,7 @@ name: CI/CD with Gradle and Heroku
 on:
   push:
     branches:
-      - berita
+      - kelas
 
 jobs:
   build-and-deploy:
