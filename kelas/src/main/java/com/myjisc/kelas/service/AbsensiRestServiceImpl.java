@@ -2,7 +2,7 @@ package com.myjisc.kelas.service;
 
 import java.util.List;
 import java.util.UUID;
-
+import java.rmi.NoSuchObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +41,17 @@ public class AbsensiRestServiceImpl implements AbsensiRestService{
             }
         }
         return null;
+    }
+
+    @Override
+    public Absensi updateRestAbsensi( Absensi absensiFromDTO) throws NoSuchObjectException {
+        Absensi absensiToUpdate = getRestAbsensiByIdAbsensi(absensiFromDTO.getIdAbsen());
+        if (absensiToUpdate == null) {
+            throw new NoSuchObjectException("Absensi not found");
+        }
+        absensiToUpdate.setTanggalAbsen(absensiFromDTO.getTanggalAbsen());
+        absensiToUpdate.setKeteranganAbsen(absensiFromDTO.getKeteranganAbsen());
+        absensiDb.save(absensiToUpdate);
+        return absensiToUpdate;
     }
 }

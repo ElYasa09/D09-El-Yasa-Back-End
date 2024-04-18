@@ -101,7 +101,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Check your input again");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -163,7 +163,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -206,7 +206,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -261,7 +261,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -323,7 +323,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -334,7 +334,12 @@ public class KelasRestController {
             BindingResult bindingResult) {
         
             if (bindingResult.hasErrors()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("status", "fail");
+
+                responseBody.put("data", "invalid data");
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
             }
 
             if (kelasRestService.getRestKelasByIdKelas(UUID.fromString(idKelas)) == null) {
@@ -387,7 +392,7 @@ public class KelasRestController {
                 return ResponseEntity.status(HttpStatus.OK).body(responseBody);
             } catch (Exception e) {
                 Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("message", "Check your input again");
+                responseBody.put("message", "Something went wrong");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
             }
     }
@@ -412,7 +417,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -448,7 +453,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Check your input again");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -489,7 +494,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -497,7 +502,12 @@ public class KelasRestController {
     @PutMapping("/mapel/update/{idMapel}")
     public ResponseEntity<?> updateMapel(@PathVariable("idMapel") String idMapel, @Valid @RequestBody UpdateMapelRequestDTO updateMapelRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "fail");
+
+            responseBody.put("data", "invalid data");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
         }
 
         try {
@@ -530,7 +540,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Check your input again");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -555,7 +565,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -623,7 +633,7 @@ public class KelasRestController {
             }
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Check your input again");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
@@ -710,7 +720,7 @@ public class KelasRestController {
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Unable communicate with database");
+            responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
