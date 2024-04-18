@@ -22,11 +22,14 @@ import propensi.myjisc.user.service.JwtService;
 
 
 @Component
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  private final JwtService jwtService;
-  private final UserDetailsService userDetailsService;
+  @Autowired
+  private JwtService jwtService;
+
+  @Autowired
+  private UserDetailsService userDetailsService;
 
   @Override
   protected void doFilterInternal(
