@@ -20,5 +20,6 @@ import lombok.Setter;
 public class ScoreDTO {
     private List<String> tipeNilai;
     private List<Long> listNilai;
+    private UUID idNilai;
 
 }

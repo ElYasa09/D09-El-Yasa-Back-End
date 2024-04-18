@@ -23,15 +23,37 @@ public class ScoreService {
     public Score simpanNilai(ScoreDTO scoreDTO, User user) {
 
         Score score = new Score();
+        score.setIdNilai(scoreDTO.getIdNilai());
         score.setTipeNilai(scoreDTO.getTipeNilai());
         score.setListNilai(scoreDTO.getListNilai());
         score.setUser(user);
         return scoreRepository.save(score);
     }
 
-    public List<Score> getScoresByUserId(Long userId) {
-        // Implement the logic to retrieve scores by user ID from the repository
-        return scoreRepository.findByUserId(userId);
+    // public List<Score> getScoresByUserId(Long userId) {
+    //     // Implement the logic to retrieve scores by user ID from the repository
+    //     return scoreRepository.findByUserId(userId);
+    // }
+
+    public List<ScoreDTO> getScoresByUserId(Long userId) {
+        List<Score> scores = scoreRepository.findByUserId(userId);
+        List<ScoreDTO> scoreDTOs = new ArrayList<>();
+    
+        for (Score score : scores) {
+            ScoreDTO dto = mapToScoreResponseDTO(score);
+            scoreDTOs.add(dto);
+        }
+    
+        return scoreDTOs;
+    }
+    
+
+    private ScoreDTO mapToScoreResponseDTO(Score score) {
+        ScoreDTO dto = new ScoreDTO();
+        dto.setIdNilai(score.getIdNilai());
+        dto.setTipeNilai(score.getTipeNilai());
+        dto.setListNilai(score.getListNilai());
+        return dto;
     }
 
     // @Autowired

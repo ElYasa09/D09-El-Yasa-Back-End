@@ -52,13 +52,11 @@ public class ScoreController {
     }
 
     @GetMapping("/scores/{userId}")
-    public ResponseEntity<List<Score>> getUserScores(@PathVariable Long userId) {
-    List<Score> scores = scoreService.getScoresByUserId(userId);
-    
-    if (scores.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-        
+    public ResponseEntity<List<ScoreDTO>> getUserScores(@PathVariable Long userId) {
+        List<ScoreDTO> scores = scoreService.getScoresByUserId(userId);
+        if (scores.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(scores, HttpStatus.OK);
     }
 
