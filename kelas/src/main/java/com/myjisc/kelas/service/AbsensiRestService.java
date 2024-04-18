@@ -11,4 +11,5 @@ public interface AbsensiRestService {
     List<Absensi> retrieveRestAllAbsensi();
     List<Absensi> retrieveRestAllAbsensiByKelas(UUID idKelas);
     Absensi getRestAbsensiByIdAbsensi(UUID idAbsen);
+    Absensi updateRestAbsensi(Absensi absensiFromDTO) throws NoSuchObjectException;
 }
