@@ -32,6 +32,6 @@ public class MataPelajaran {
     @JoinColumn(name = "mapel_kelas", referencedColumnName = "idKelas")
     private Kelas kelas;
 
-    @OneToMany(mappedBy = "mataPelajaran", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mataPelajaran", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<KontenMapel> listKontenMapel;
 }

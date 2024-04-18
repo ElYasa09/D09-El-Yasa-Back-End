@@ -1,7 +1,6 @@
 package com.myjisc.kelas.restcontroller;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +10,12 @@ import java.util.UUID;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +33,6 @@ import com.myjisc.kelas.model.Absensi;
 import com.myjisc.kelas.model.Kelas;
 import com.myjisc.kelas.model.KontenMapel;
 import com.myjisc.kelas.model.MataPelajaran;
-import com.myjisc.kelas.repository.KontenMapelDb;
 import com.myjisc.kelas.service.KelasRestService;
 import com.myjisc.kelas.service.KontenMapelRestService;
 import com.myjisc.kelas.service.MataPelajaranRestService;
@@ -73,7 +69,7 @@ public class KelasRestController {
     KontenMapelMapper kontenMapelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity createKelas(@Valid @RequestBody CreateKelasRequestDTO KelasRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> createKelas(@Valid @RequestBody CreateKelasRequestDTO KelasRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "fail");
@@ -112,7 +108,7 @@ public class KelasRestController {
     }
 
     @GetMapping("/view-all")
-    public ResponseEntity viewAllKelas() {
+    public ResponseEntity<?> viewAllKelas() {
         
         List<Kelas> listAvailableKelas = kelasRestService.retrieveRestAvailableKelas();
 
@@ -174,7 +170,7 @@ public class KelasRestController {
     }
 
     @GetMapping("/{idKelas}")
-    public ResponseEntity getDetailKelasByIdKelas(@PathVariable("idKelas") String idKelas) {
+    public ResponseEntity<?> getDetailKelasByIdKelas(@PathVariable("idKelas") String idKelas) {
         try {
             var kelas = kelasRestService.getRestKelasByIdKelas(UUID.fromString(idKelas));
         
@@ -217,7 +213,7 @@ public class KelasRestController {
     }
 
     @GetMapping("/siswa/{idSiswa}")
-    public ResponseEntity getKelasByIdSiswa(@PathVariable("idSiswa") Long idSiswa) {
+    public ResponseEntity<?> getKelasByIdSiswa(@PathVariable("idSiswa") Long idSiswa) {
         try {
             var kelas = kelasRestService.getRestKelasByIdSiswa(idSiswa);
         
@@ -273,7 +269,7 @@ public class KelasRestController {
     }
 
     @GetMapping("/guru/{idGuru}")
-    public ResponseEntity viewAllKelasDiajarByIdGuru(@PathVariable("idGuru") Long idGuru) {
+    public ResponseEntity<?> viewAllKelasDiajarByIdGuru(@PathVariable("idGuru") Long idGuru) {
         
         List<Kelas> listAvailableKelas = kelasRestService.getRestKelasByIdGuru(idGuru);
 
@@ -335,7 +331,7 @@ public class KelasRestController {
     }
     
     @PutMapping("/update/{idKelas}")
-    public ResponseEntity updateKelas(@PathVariable("idKelas") String idKelas, 
+    public ResponseEntity<?> updateKelas(@PathVariable("idKelas") String idKelas, 
             @Valid @RequestBody UpdateKelasRequestDTO updateKelasRequestDTO, 
             BindingResult bindingResult) {
         
@@ -399,7 +395,7 @@ public class KelasRestController {
     }
 
     @DeleteMapping("/delete/{idKelas}")
-    public ResponseEntity deleteKelas(@PathVariable("idKelas") String idKelas) {
+    public ResponseEntity<?> deleteKelas(@PathVariable("idKelas") String idKelas) {
         try {
             var kelas = kelasRestService.getRestKelasByIdKelas(UUID.fromString(idKelas));
 
@@ -424,7 +420,7 @@ public class KelasRestController {
     }
 
     @PostMapping("/{idKelas}/create-mapel")
-    public ResponseEntity createMapel(@PathVariable("idKelas") String idKelas, @Valid @RequestBody CreateMapelRequestDTO createMapelRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> createMapel(@PathVariable("idKelas") String idKelas, @Valid @RequestBody CreateMapelRequestDTO createMapelRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "fail");
@@ -460,7 +456,7 @@ public class KelasRestController {
     }
 
     @GetMapping("/mapel/{idMapel}")
-    public ResponseEntity getDetailMapel(@PathVariable("idMapel") String idMapel) {
+    public ResponseEntity<?> getDetailMapel(@PathVariable("idMapel") String idMapel) {
         try {
             var mapel = mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel));
             
@@ -502,7 +498,7 @@ public class KelasRestController {
     }
 
     @PutMapping("/mapel/update/{idMapel}")
-    public ResponseEntity updateMapel(@PathVariable("idMapel") String idMapel, @Valid @RequestBody UpdateMapelRequestDTO updateMapelRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> updateMapel(@PathVariable("idMapel") String idMapel, @Valid @RequestBody UpdateMapelRequestDTO updateMapelRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
         }
@@ -543,7 +539,7 @@ public class KelasRestController {
     }
     
     @DeleteMapping("/delete/mapel/{idMapel}")
-    public ResponseEntity deleteMapel(@PathVariable("idMapel") String idMapel) {
+    public ResponseEntity<?> deleteMapel(@PathVariable("idMapel") String idMapel) {
         try {
             var mapel = mataPelajaranRestService.getRestMataPelajaranByIdMataPelajaran(UUID.fromString(idMapel));
 
@@ -568,7 +564,7 @@ public class KelasRestController {
     }
 
     @PostMapping("/{idMapel}/create-materi")
-    public ResponseEntity createMateri(@PathVariable("idMapel") String idMapel,@Valid @RequestBody @ModelAttribute CreateKontenMapelRequestDTO kontenMapelRequestDTO, @RequestPart(value = "file", required = false) MultipartFile file, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<?> createMateri(@PathVariable("idMapel") String idMapel,@Valid @RequestBody @ModelAttribute CreateKontenMapelRequestDTO kontenMapelRequestDTO, @RequestPart(value = "file", required = false) MultipartFile file, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "fail");
@@ -628,7 +624,7 @@ public class KelasRestController {
     }
     
     @GetMapping("/materi/{idKonten}")
-    public ResponseEntity getFileMateriDetail(@PathVariable("idKonten") String idKonten) {
+    public ResponseEntity<?> getFileMateriDetail(@PathVariable("idKonten") String idKonten) {
         try {
             var materi = kontenMapelRestService.getKontenMapelByIdKonten(UUID.fromString(idKonten));
 
@@ -668,7 +664,7 @@ public class KelasRestController {
     }
 
     @GetMapping("get/materi/{idKonten}")
-    public ResponseEntity downloadMateriFile(@PathVariable("idKonten") String idKonten) {
+    public ResponseEntity<?> downloadMateriFile(@PathVariable("idKonten") String idKonten) {
         try {
             var materi = kontenMapelRestService.getKontenMapelByIdKonten(UUID.fromString(idKonten));
 
