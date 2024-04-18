@@ -2,7 +2,6 @@ package com.myjisc.kelas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,12 +32,6 @@ public class MataPelajaran {
     @JoinColumn(name = "mapel_kelas", referencedColumnName = "idKelas")
     private Kelas kelas;
 
-    @OneToMany(mappedBy = "mataPelajaran", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mataPelajaran", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<KontenMapel> listKontenMapel;
-
-    @NotNull
-    @Column(name = "is_deleted")
-    private boolean isDeleted = false;
-
-
 }
