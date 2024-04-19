@@ -1,5 +1,8 @@
 package propensi.myjisc.user.service;
 
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +13,14 @@ import org.springframework.stereotype.Service;
 import propensi.myjisc.user.dto.RegisterRequest;
 import propensi.myjisc.user.dto.UserResponseDTO;
 import propensi.myjisc.user.dto.EditUserRequestDTO;
+import propensi.myjisc.user.model.Role;
 import propensi.myjisc.user.model.User;
 import propensi.myjisc.user.repository.UserRepository;
 
 @Service
 public class UserService {
 
+    @Autowired
     private  UserRepository userRepository;
     
     public void updateUser(Long id, EditUserRequestDTO editRequest) {
@@ -65,7 +70,31 @@ public class UserService {
         return response;
     }
 
-    
+    public List<Long> getAllMurid() throws NoSuchObjectException {
+        List<User> listMurid = userRepository.findByRole(Role.MURID);
+        List<Long> idMurid = new ArrayList<>();
+        if (listMurid.isEmpty() || listMurid == null) {
+            throw new NoSuchObjectException("No murid found");
+        } else {
+            for (User user : listMurid) {
+                idMurid.add(user.getId());
+            }
+            return idMurid;
+        }
+    }
+
+    public List<Long> getAllGuru() throws NoSuchObjectException {
+        List<User> listGuru = userRepository.findByRole(Role.GURU);
+        List<Long> idGuru = new ArrayList<>();
+        if (listGuru.isEmpty() || listGuru == null) {
+            throw new NoSuchObjectException("No murid found");
+        } else {
+            for (User user : listGuru) {
+                idGuru.add(user.getId());
+            }
+            return idGuru;
+        }
+    }
 
 
 }

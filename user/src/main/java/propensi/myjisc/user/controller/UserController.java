@@ -23,7 +23,10 @@ import propensi.myjisc.user.model.User;
 import propensi.myjisc.user.repository.UserRepository;
 import propensi.myjisc.user.service.UserService;
 
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -93,6 +96,57 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/user/get-all-murid")
+    public ResponseEntity<?> getAllMurid() throws NoSuchObjectException {
+        List<Long> listMurid = userService.getAllMurid();
+        
+        if (listMurid.isEmpty() || listMurid == null) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Data not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+        }
+
+        try {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", listMurid);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+            
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+        
+    }
+
+    @GetMapping("/user/get-all-guru")
+    public ResponseEntity<?> getAllGuru() throws NoSuchObjectException {
+        List<Long> listGuru = userService.getAllGuru();
+        
+        if (listGuru.isEmpty() || listGuru == null) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Data not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+        }
+
+        try {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", listGuru);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+            
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+        
+    }
+    
 
 
         
