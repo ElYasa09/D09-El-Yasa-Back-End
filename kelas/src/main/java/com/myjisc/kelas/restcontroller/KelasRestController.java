@@ -195,11 +195,24 @@ public class KelasRestController {
                 for (MataPelajaran mapel : kelas.getListMataPelajaran()) {
                     listUUIDMapel.add(mapel.getIdMapel());
                 }
+                data.put("listMataPelajaran", listUUIDMapel);
+            } else {
+                data.put("listMataPelajaran", null);
             }
 
             data.put("listMataPelajaran", listUUIDMapel);
             data.put("isDeleted", kelas.isDeleted());
-            data.put("absensiList", kelas.getAbsensiList());
+            
+            List<UUID> listUUIDAbsensi = new ArrayList<>();
+
+                if (!kelas.getAbsensiList().isEmpty()) {
+                    for (Absensi absensi : kelas.getAbsensiList()) {
+                        listUUIDAbsensi.add(absensi.getIdAbsen());
+                    }
+                    data.put("absensiList", listUUIDAbsensi);
+                } else {
+                    data.put("absensiList", null);
+                }
 
             responseBody.put("data", data);
 
