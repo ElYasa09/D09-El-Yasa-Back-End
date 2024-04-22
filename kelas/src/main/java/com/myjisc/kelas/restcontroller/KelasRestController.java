@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.myjisc.kelas.dto.KelasMapper;
 import com.myjisc.kelas.dto.KontenMapelMapper;
 import com.myjisc.kelas.dto.MataPelajaranMapper;
@@ -648,7 +646,6 @@ public class KelasRestController {
             }
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            e.printStackTrace();
             responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }

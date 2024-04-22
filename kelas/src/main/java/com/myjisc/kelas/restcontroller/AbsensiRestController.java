@@ -41,7 +41,7 @@ public class AbsensiRestController {
     KelasRestService kelasRestService;
 
     @PostMapping("/create/{idKelas}")
-    public ResponseEntity createAbsensi(@PathVariable("idKelas") String IdKelas,
+    public ResponseEntity<?> createAbsensi(@PathVariable("idKelas") String IdKelas,
             @Valid @RequestBody CreateAbsensiRequestDTO absensiDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +93,7 @@ public class AbsensiRestController {
     }
 
     @GetMapping("/{idKelas}")
-    public ResponseEntity retrieveAbsensiKelas(@PathVariable("idKelas") String idKelas) {
+    public ResponseEntity<?> retrieveAbsensiKelas(@PathVariable("idKelas") String idKelas) {
         List<Absensi> listAbsensi = absensiRestService.retrieveRestAllAbsensiByKelas(UUID.fromString(idKelas));
 
         if (listAbsensi.isEmpty()) {
@@ -130,7 +130,7 @@ public class AbsensiRestController {
     }
 
     @GetMapping("/detail/{idAbsen}")
-    public ResponseEntity retrieveDetailAbsensi(@PathVariable("idAbsen") String idAbsen) {
+    public ResponseEntity<?> retrieveDetailAbsensi(@PathVariable("idAbsen") String idAbsen) {
         Absensi absensi = absensiRestService.getRestAbsensiByIdAbsensi(UUID.fromString(idAbsen));
 
         System.out.println(absensi);
@@ -163,7 +163,7 @@ public class AbsensiRestController {
     }
 
     @PutMapping("/update/{idAbsen}")
-    public ResponseEntity updateAbsensi(@PathVariable("idAbsen") String idAbsen,
+    public ResponseEntity<?> updateAbsensi(@PathVariable("idAbsen") String idAbsen,
             @Valid @RequestBody UpdateAbsensiRequestDTO updateAbsensiRequestDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
