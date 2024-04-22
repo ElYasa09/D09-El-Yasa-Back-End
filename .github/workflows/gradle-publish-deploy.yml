@@ -1,0 +1,33 @@
+name: CI/CD with Gradle and Heroku
+
+on:
+  push:
+    branches:
+      - kelas
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission to gradlew script
+        run: |
+          chmod +x kelas/gradlew
+
+      - name: Build with Gradle
+        run: |
+          cd kelas
+          ./gradlew build
+
+      - name: Deploy to Heroku
+        run: |
+          echo "Build successful, changes will be automatically deployed by Heroku"
