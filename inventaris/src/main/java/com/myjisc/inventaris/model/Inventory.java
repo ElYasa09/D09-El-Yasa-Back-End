@@ -1,6 +1,5 @@
 package com.myjisc.inventaris.model;
 
-import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -33,11 +32,7 @@ public class Inventory {
     private Long quantityBorrowed;
 
     @Lob
-    @Basic(fetch =  FetchType.EAGER)
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "image_item")
     private byte[] imageItem;
-
-    @ManyToMany(mappedBy = "requestedItems", fetch = FetchType.LAZY)
-    List<InventoryRequest> listRequest;
-
 }
