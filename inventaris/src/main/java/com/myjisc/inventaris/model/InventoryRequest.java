@@ -18,7 +18,7 @@ import lombok.Setter;;
 @Entity
 @Table(name = "inventory_request")
 public class InventoryRequest {
-    
+
     @Id
     private UUID idRequest = UUID.randomUUID();
 
@@ -34,8 +34,11 @@ public class InventoryRequest {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @ManyToMany
-    @JoinTable(name = "item_request", joinColumns = @JoinColumn(name = "idRequest"),
-                inverseJoinColumns = @JoinColumn(name = "idItem") )
-    List<Inventory> requestedItems;
+    @NotNull
+    @Column(name = "list_id_item", nullable = false)
+    private List<UUID> listIdItem;
+
+    @NotNull
+    @Column(name = "list_quantity_item", nullable = false)
+    private List<Long> listQuantityItem;
 }
