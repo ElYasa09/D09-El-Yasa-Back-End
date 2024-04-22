@@ -612,6 +612,7 @@ public class KelasRestController {
                     data.put("tipe_file", materi.getTipeFile());
                     data.put("fileKonten", "/get/materi/" + materi.getIdKonten());
                     data.put("mataPelajaran", materi.getMataPelajaran().getIdMapel());
+                    data.put("dateCreated", materi.getDateCreated());
 
                     responseBody.put("data", data);
 
@@ -639,6 +640,7 @@ public class KelasRestController {
                 data.put("tipe_file",null);
                 data.put("fileKonten", null);
                 data.put("mataPelajaran", materi.getMataPelajaran().getIdMapel());
+                data.put("dateCreated", materi.getDateCreated());
                 
                 responseBody.put("data", data);
 
@@ -646,6 +648,7 @@ public class KelasRestController {
             }
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
+            e.printStackTrace();
             responseBody.put("message", "Something went wrong");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
@@ -679,6 +682,7 @@ public class KelasRestController {
             }
             
             data.put("mataPelajaran", materi.getMataPelajaran().getIdMapel());
+            data.put("dateCreated", materi.getDateCreated());
             
             responseBody.put("data", data);
 

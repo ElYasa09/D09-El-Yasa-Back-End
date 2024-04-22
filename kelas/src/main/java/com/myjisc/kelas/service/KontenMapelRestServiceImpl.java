@@ -36,6 +36,9 @@ public class KontenMapelRestServiceImpl implements KontenMapelRestService{
         kontenMapel.setNamaFile(file.getOriginalFilename());
         kontenMapel.setFileKonten(file.getBytes());
         kontenMapel.setTipeFile(file.getContentType());
+        var timeNow = LocalDateTime.now();
+        kontenMapel.setDateCreated(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
+        kontenMapelDb.save(kontenMapel);
         kontenMapelDb.save(kontenMapel);
         return kontenMapel;
     }
