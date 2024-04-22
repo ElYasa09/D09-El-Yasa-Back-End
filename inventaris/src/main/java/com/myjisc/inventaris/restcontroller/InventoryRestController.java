@@ -60,7 +60,6 @@ public class InventoryRestController {
             data.put("quantityItem", inventory.getQuantityItem());
             data.put("quantityBorrowed", inventory.getQuantityBorrowed());
             data.put("imageItem", "image succesfully uploaded");
-            data.put("listRequest", inventory.getListRequest());
 
             responseBody.put("data", data);
 
