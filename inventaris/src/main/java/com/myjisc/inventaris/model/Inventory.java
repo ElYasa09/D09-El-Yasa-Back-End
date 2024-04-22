@@ -35,7 +35,7 @@ public class Inventory {
     @Lob
     @Basic(fetch =  FetchType.EAGER)
     @Column(name = "image_item")
-    private Byte[] imageItem;
+    private byte[] imageItem;
 
     @ManyToMany(mappedBy = "requestedItems", fetch = FetchType.LAZY)
     List<InventoryRequest> listRequest;
