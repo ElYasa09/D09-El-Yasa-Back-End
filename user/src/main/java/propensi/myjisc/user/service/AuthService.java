@@ -1,13 +1,20 @@
 package propensi.myjisc.user.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import propensi.myjisc.user.dto.AuthRequestDTO;
 import propensi.myjisc.user.dto.AuthResponseDTO;
@@ -26,6 +33,8 @@ public class AuthService {
     private  JwtService jwtService;
     @Autowired
     private  AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
     
     public User register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -66,4 +75,21 @@ public class AuthService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        // Invalidate the current HttpSession, if any
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        SecurityContextHolder.clearContext();
+        
+    }
+
+    public void logout(String token) {
+        tokenBlacklistService.addToBlacklist(token);
+    }
+
+
 }
