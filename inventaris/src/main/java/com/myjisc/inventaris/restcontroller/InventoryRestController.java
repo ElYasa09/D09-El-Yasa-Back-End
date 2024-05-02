@@ -45,7 +45,7 @@ public class InventoryRestController {
     InventoryMapper inventoryMapper;
 
     @Autowired
-    InventoryRequestService inventoryRequestService;
+    InventoryRestService inventoryRequestService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createInventory(
