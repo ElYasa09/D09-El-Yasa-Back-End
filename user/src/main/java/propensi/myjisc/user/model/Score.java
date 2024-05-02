@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -49,6 +50,7 @@ public class Score {
     @JoinColumn(name = "user_id")
     private User user;
     
-    
+    @Column(name = "id_mapel")
+    private UUID idMapel;
 }
 

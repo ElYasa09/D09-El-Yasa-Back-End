@@ -11,5 +11,5 @@ import com.myjisc.inventaris.model.Inventory;
 @Repository
 @Transactional
 public interface InventoryDb extends JpaRepository<Inventory, UUID> {
-
+    
 }

@@ -5,10 +5,13 @@ import java.util.UUID;
 import java.util.List;
 
 import java.rmi.NoSuchObjectException;
+import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.myjisc.inventaris.model.Inventory;
+
+import com.myjisc.inventaris.model.InventoryRequest;
 
 public interface InventoryRestService {
     Inventory createInventory(Inventory inventory, MultipartFile image) throws IOException;
@@ -26,4 +29,6 @@ public interface InventoryRestService {
     Inventory updateItem(Inventory inventoryFromDTO) throws NoSuchObjectException;
 
     byte[] getImageItem(UUID idItem) throws NoSuchObjectException;
+
+    InventoryRequest createRequest(Date startDateTime, Date endDateTime, List<Long> idRequest);
 }

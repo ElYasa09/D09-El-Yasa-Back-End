@@ -28,9 +28,11 @@ import com.myjisc.inventaris.dto.InventoryMapper;
 import com.myjisc.inventaris.dto.request.CreateInventoryRequestDTO;
 import com.myjisc.inventaris.dto.request.UpdateInventoryRequestDTO;
 import com.myjisc.inventaris.model.Inventory;
+import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.service.InventoryRestService;
 
 import jakarta.validation.Valid;
+import main.java.com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -240,4 +242,86 @@ public class InventoryRestController {
         }
     }
 
+    @PostMapping("/borrow")
+    public ResponseEntity<?> createAndBorrowRequest(@RequestBody CreateRequestPeminjamanDTO inventoryRequestDTO) {
+        try {
+            // Create the inventory request
+            InventoryRequest inventoryRequest = inventoryRequestService.createRequest(inventoryRequestDTO);
+    
+            // Borrow the items
+            for (int i = 0; i < inventoryRequestDTO.getListIdItem().size(); i++) {
+                UUID idItem = inventoryRequestDTO.getListIdItem().get(i);
+                Long quantity = inventoryRequestDTO.getListQuantityItem().get(i);
+    
+                var item = inventoryRestService.getItemByIdItem(idItem);
+    
+                if (item == null) {
+                    Map<String, Object> responseBody = new HashMap<>();
+                    responseBody.put("message", "Item not found");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+                }
+    
+                if (item.getQuantityItem() < quantity) {
+                    Map<String, Object> responseBody = new HashMap<>();
+                    responseBody.put("message", "Quantity not enough");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+                }
+    
+                item.setQuantityItem(item.getQuantityItem() - quantity);
+                item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
+    
+                inventoryRestService.updateItem(item);
+            }
+    
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Items have been borrowed");
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+   
+
+
 }
+
+// @PostMapping("/borrow")
+// public ResponseEntity<?> borrowItem(@RequestBody Map<String, Object> borrowRequest) {
+//     try {
+//         UUID idItem = UUID.fromString(borrowRequest.get("idItem").toString());
+//         Long quantity = Long.parseLong(borrowRequest.get("quantity").toString());
+
+//         var item = inventoryRestService.getItemByIdItem(idItem);
+
+//         if (item == null) {
+//             Map<String, Object> responseBody = new HashMap<>();
+//             responseBody.put("message", "Item not found");
+//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+//         }
+
+//         if (item.getQuantityItem() < quantity) {
+//             Map<String, Object> responseBody = new HashMap<>();
+//             responseBody.put("message", "Quantity not enough");
+//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+//         }
+
+//         item.setQuantityItem(item.getQuantityItem() - quantity);
+//         item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
+
+//         inventoryRestService.updateItem(item);
+
+//         Map<String, Object> responseBody = new HashMap<>();
+//         responseBody.put("status", "success");
+//         responseBody.put("data", "Item has been borrowed");
+
+//         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+//     } catch (Exception e) {
+//         Map<String, Object> responseBody = new HashMap<>();
+//         responseBody.put("message", "Something went wrong");
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+//     }
+

@@ -1,24 +1,19 @@
-package com.myjisc.inventaris.model;
+package main.java.com.myjisc.inventaris.dto.request;
+
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;;
-
-@Getter
-@Setter
+@Valid
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "inventory_request")
-public class InventoryRequest {
-
+@Data
+public class CreateRequestPeminjamanDTO {
     @Id
     private UUID idRequest = UUID.randomUUID();
 

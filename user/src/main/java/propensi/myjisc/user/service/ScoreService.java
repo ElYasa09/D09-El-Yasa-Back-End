@@ -1,15 +1,11 @@
 package propensi.myjisc.user.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.rmi.NoSuchObjectException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import propensi.myjisc.user.controller.UserController;
 import propensi.myjisc.user.dto.ScoreDTO;
 import propensi.myjisc.user.model.Score;
 import propensi.myjisc.user.model.User;
@@ -27,6 +23,7 @@ public class ScoreService {
         score.setIdNilai(scoreDTO.getIdNilai());
         score.setTipeNilai(scoreDTO.getTipeNilai());
         score.setListNilai(scoreDTO.getListNilai());
+        score.setIdMapel(scoreDTO.getIdMapel());
         score.setUser(user);
         return scoreRepository.save(score);
     }
@@ -36,16 +33,14 @@ public class ScoreService {
     //     return scoreRepository.findByUserId(userId);
     // }
 
-    public List<ScoreDTO> getScoresByUserId(Long userId) {
-        List<Score> scores = scoreRepository.findByUserId(userId);
-        List<ScoreDTO> scoreDTOs = new ArrayList<>();
+    public Score getScoresByUserId(Long userId) throws NoSuchObjectException {
+        Score scores = scoreRepository.findByUserId(userId);
     
-        for (Score score : scores) {
-            ScoreDTO dto = mapToScoreResponseDTO(score);
-            scoreDTOs.add(dto);
+        if (scores == null) {
+            throw new NoSuchObjectException("No Scores Found for this ids");
         }
     
-        return scoreDTOs;
+        return scores;
     }
     
 
@@ -67,6 +62,20 @@ public class ScoreService {
         Score updatedScore = scoreRepository.save(score);
     
         return mapToScoreResponseDTO(updatedScore);
+    }
+
+    public void deleteScore(UUID idScore) {
+        Score score = scoreRepository.findById(idScore)
+            .orElseThrow(() -> new RuntimeException("Score not found"));
+
+        scoreRepository.delete(score);
+    }
+
+    public Score getScoreByIdScore(UUID idScore) {
+        Score score = scoreRepository.findById(idScore)
+            .orElseThrow(() -> new RuntimeException("Score not found"));
+
+        return score;
     }
 
 

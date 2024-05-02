@@ -6,10 +6,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.rmi.NoSuchObjectException;
 
+import com.myjisc.inventaris.dto.request.CreateInventoryRequestDTO;
 import com.myjisc.inventaris.model.Inventory;
+import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.repository.InventoryDb;
+import com.myjisc.inventaris.repository.InventoryRequestDb;
 
 import jakarta.transaction.Transactional;
+import main.java.com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -21,6 +25,9 @@ public class InventoryRestServiceImpl implements InventoryRestService {
 
     @Autowired
     private InventoryDb inventoryDb;
+
+    @Autowired
+    private InventoryRequestDb inventoryRequestDb;
 
     @Autowired
     private ImageUtilService imageUtilService;
@@ -100,4 +107,33 @@ public class InventoryRestServiceImpl implements InventoryRestService {
             throw new NoSuchObjectException("Berita Not Found");
         }
     };
+
+    @Override
+    public InventoryRequest createRequest(CreateRequestPeminjamanDTO inventoryRequestDTO) {
+        InventoryRequest inventoryRequest = new InventoryRequest();
+        
+        inventoryRequest.setIdRequest(UUID.randomUUID());
+        inventoryRequest.setRequestDate(inventoryRequestDTO.getRequestDate());
+        inventoryRequest.setReturnDate(inventoryRequestDTO.getReturnDate());
+        inventoryRequest.setStatus(inventoryRequestDTO.getStatus());
+        inventoryRequest.setListIdItem(inventoryRequestDTO.getListIdItem());
+        inventoryRequest.setListQuantityItem(inventoryRequestDTO.getListQuantityItem());
+        
+        inventoryRequestDb.save(inventoryRequest);
+        return inventoryRequest;
+    }
+
+
 }
+
+// @Override
+// public InventoryRequest createRequest(CreateInventoryRequestDTO inventoryRequestDTO) {
+
+//     InventoryRequest inventoryRequest = new InventoryRequest();
+    
+//     inventoryRequest.setIdRequest(UUID.randomUUID());
+//     inventoryRequest.setRequestDate(new Date(System.currentTimeMillis()));
+//     inventoryRequest.setReturnDate(new Date(System.currentTimeMillis()));
+    
+    
+// }

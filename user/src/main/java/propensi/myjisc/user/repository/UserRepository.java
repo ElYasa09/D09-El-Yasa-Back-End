@@ -1,5 +1,6 @@
 package propensi.myjisc.user.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import propensi.myjisc.user.model.User;
+import propensi.myjisc.user.model.Role;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
@@ -19,5 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     @Modifying
     @Query("UPDATE User u SET u.deleted = true WHERE u.id = :id")
     void softDeleteUser(@Param("id") Long id);
-
+    List<User> findByRole(Role role);
  }
