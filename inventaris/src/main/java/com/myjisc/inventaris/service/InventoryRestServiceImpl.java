@@ -13,7 +13,7 @@ import com.myjisc.inventaris.repository.InventoryDb;
 import com.myjisc.inventaris.repository.InventoryRequestDb;
 
 import jakarta.transaction.Transactional;
-import main.java.com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
+import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -122,6 +122,12 @@ public class InventoryRestServiceImpl implements InventoryRestService {
         inventoryRequestDb.save(inventoryRequest);
         return inventoryRequest;
     }
+
+    // @Override
+    // public InventoryRequest createRequest(Date startDateTime, Date endDateTime, List<Long> idRequest) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'createRequest'");
+    // }
 
 
 }

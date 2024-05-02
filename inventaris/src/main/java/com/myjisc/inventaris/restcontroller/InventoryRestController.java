@@ -32,7 +32,7 @@ import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.service.InventoryRestService;
 
 import jakarta.validation.Valid;
-import main.java.com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
+import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -43,6 +43,9 @@ public class InventoryRestController {
 
     @Autowired
     InventoryMapper inventoryMapper;
+
+    @Autowired
+    InventoryRequestService inventoryRequestService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createInventory(

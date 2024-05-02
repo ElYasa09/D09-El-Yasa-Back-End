@@ -1,4 +1,4 @@
-package main.java.com.myjisc.inventaris.repository;
+package com.myjisc.inventaris.repository;
 
 
 import java.time.LocalDateTime;
@@ -15,6 +15,7 @@ import com.myjisc.inventaris.model.InventoryRequest;
 public interface InventoryRequestDb extends JpaRepository<Inventory, UUID> {
     List<InventoryRequest> findAllByRequestByWaktuPermintaanDesc();
     List<InventoryRequest> findByWaktuPeminjamanBetweenAndIdPengirimanInOrderByWaktuPermintaan(LocalDateTime requestDate, LocalDateTime returnDate, List<Long> idRequest);
+    void save(InventoryRequest inventoryRequest);
 }
 
 

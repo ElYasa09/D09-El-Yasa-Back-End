@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 import com.myjisc.inventaris.model.Inventory;
 
 import com.myjisc.inventaris.model.InventoryRequest;
@@ -30,5 +31,5 @@ public interface InventoryRestService {
 
     byte[] getImageItem(UUID idItem) throws NoSuchObjectException;
 
-    InventoryRequest createRequest(Date startDateTime, Date endDateTime, List<Long> idRequest);
+    InventoryRequest createRequest(CreateRequestPeminjamanDTO createRequestPeminjamanDTO);
 }

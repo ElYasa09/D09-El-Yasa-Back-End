@@ -1,6 +1,8 @@
-package main.java.com.myjisc.inventaris.dto.request;
+package com.myjisc.inventaris.dto.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.annotation.Id;
 
 @Valid
 @AllArgsConstructor
