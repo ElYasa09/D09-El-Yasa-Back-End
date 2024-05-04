@@ -1,6 +1,6 @@
 package com.myjisc.inventaris.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class InventoryRequest {
 
     @NotNull
     @Column(name = "id_peminjam", nullable = false)
-    private UUID idSiswa = UUID.randomUUID();
+    private UUID idPeminjam = UUID.randomUUID();
 
     @NotNull
     @Column(name = "request_date", nullable = false)

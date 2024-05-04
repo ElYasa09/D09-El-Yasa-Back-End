@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.myjisc.inventaris.dto.InventoryMapper;
+import com.myjisc.inventaris.dto.InventoryRequestMapper;
 import com.myjisc.inventaris.dto.request.CreateInventoryRequestDTO;
 import com.myjisc.inventaris.dto.request.UpdateInventoryRequestDTO;
 import com.myjisc.inventaris.model.Inventory;
-import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.service.InventoryRestService;
 
 import jakarta.validation.Valid;
@@ -46,6 +46,9 @@ public class InventoryRestController {
 
     @Autowired
     InventoryRestService inventoryRequestService;
+
+    @Autowired
+    InventoryRequestMapper inventoryRequestMapper;
 
     @PostMapping("/create")
     public ResponseEntity<?> createInventory(
@@ -247,7 +250,7 @@ public class InventoryRestController {
 
     @PostMapping("/borrow")
     public ResponseEntity<?> createAndBorrowRequest(
-            @Valid @RequestBody @ModelAttribute CreateRequestPeminjamanDTO inventoryRequestDTO,
+            @Valid @RequestBody CreateRequestPeminjamanDTO inventoryRequestDTO,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -260,83 +263,27 @@ public class InventoryRestController {
         }
 
         try {
-            // Create the inventory request
-            InventoryRequest inventoryRequest = inventoryRequestService.createRequest(inventoryRequestDTO);
+            System.out.println(inventoryRequestDTO.getListIdItem());
+            System.out.println(inventoryRequestDTO.getListQuantityItem());
+            var inventoryReqFromDTO = inventoryRequestMapper
+                    .createRequestPeminjamanDTOToCreateRequestPeminjaman(inventoryRequestDTO);
 
-            // Borrow the items
-            for (int i = 0; i < inventoryRequestDTO.getListIdItem().size(); i++) {
-                UUID idItem = inventoryRequestDTO.getListIdItem().get(i);
-                Long quantity = inventoryRequestDTO.getListQuantityItem().get(i);
-
-                var item = inventoryRestService.getItemByIdItem(idItem);
-
-                if (item == null) {
-                    Map<String, Object> responseBody = new HashMap<>();
-                    responseBody.put("message", "Item not found");
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-                }
-
-                if (item.getQuantityItem() < quantity) {
-                    Map<String, Object> responseBody = new HashMap<>();
-                    responseBody.put("message", "Quantity not enough");
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-                }
-
-                item.setQuantityItem(item.getQuantityItem() - quantity);
-                item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
-
-                inventoryRestService.updateItem(item);
-            }
+            var inventoryRequest = inventoryRequestService.createRequest(inventoryReqFromDTO);
 
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
-            responseBody.put("data", "Items have been borrowed");
+            responseBody.put("data", inventoryRequest);
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("message", "Something went wrong");
+            // e.printStackTrace();
+            responseBody.put("message", "Something went wrong! Check your input again");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
         }
     }
 
+    // TODO : 1. bikin contoller get buat all list request peminjaman yang ada
+    // 2. Detail request peminjaman
+    // 3. Delete mapping bikin juga. hard delete aja
+
 }
-
-// @PostMapping("/borrow")
-// public ResponseEntity<?> borrowItem(@RequestBody Map<String, Object>
-// borrowRequest) {
-// try {
-// UUID idItem = UUID.fromString(borrowRequest.get("idItem").toString());
-// Long quantity = Long.parseLong(borrowRequest.get("quantity").toString());
-
-// var item = inventoryRestService.getItemByIdItem(idItem);
-
-// if (item == null) {
-// Map<String, Object> responseBody = new HashMap<>();
-// responseBody.put("message", "Item not found");
-// return
-// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-// }
-
-// if (item.getQuantityItem() < quantity) {
-// Map<String, Object> responseBody = new HashMap<>();
-// responseBody.put("message", "Quantity not enough");
-// return
-// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-// }
-
-// item.setQuantityItem(item.getQuantityItem() - quantity);
-// item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
-
-// inventoryRestService.updateItem(item);
-
-// Map<String, Object> responseBody = new HashMap<>();
-// responseBody.put("status", "success");
-// responseBody.put("data", "Item has been borrowed");
-
-// return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-// } catch (Exception e) {
-// Map<String, Object> responseBody = new HashMap<>();
-// responseBody.put("message", "Something went wrong");
-// return
-// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-// }

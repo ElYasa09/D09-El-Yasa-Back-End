@@ -6,17 +6,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.rmi.NoSuchObjectException;
 
-import com.myjisc.inventaris.dto.request.CreateInventoryRequestDTO;
 import com.myjisc.inventaris.model.Inventory;
 import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.repository.InventoryDb;
 import com.myjisc.inventaris.repository.InventoryRequestDb;
 
 import jakarta.transaction.Transactional;
-import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
-
 import java.io.IOException;
 import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -109,8 +109,11 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     };
 
     @Override
-    public InventoryRequest createRequest(CreateRequestPeminjamanDTO inventoryRequestDTO) {
-
+    public InventoryRequest createRequest(InventoryRequest inventoryRequest) {
+        var timeNow = LocalDateTime.now();
+        inventoryRequest.setRequestDate(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
+        inventoryRequest.setStatus("Pending");
+        inventoryRequestDb.save(inventoryRequest);
         return inventoryRequest;
     }
 
