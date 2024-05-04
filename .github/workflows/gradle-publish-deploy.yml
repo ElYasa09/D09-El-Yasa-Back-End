@@ -23,6 +23,12 @@ jobs:
         run: |
           chmod +x inventaris/gradlew
 
+      - name: Set up environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> inventaris/.env
+          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> inventaris/.env
+          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> inventaris/.env
+
       - name: Build with Gradle
         run: |
           cd inventaris
