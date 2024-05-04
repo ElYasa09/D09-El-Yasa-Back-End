@@ -32,7 +32,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd inventaris
-          ./gradlew build --stacktrace -- info
+          ./gradlew build --stacktrace --info
 
       - name: Deploy to Heroku
         run: |
