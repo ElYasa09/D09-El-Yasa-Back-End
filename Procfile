@@ -1,0 +1,1 @@
+web: sh -c "cd inventaris && chmod +x gradlew && ./gradlew build && java -jar build/libs/inventaris-0.0.1-SNAPSHOT.jar"
