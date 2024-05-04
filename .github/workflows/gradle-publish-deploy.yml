@@ -30,6 +30,7 @@ jobs:
           export DATABASE_URL="${{ secrets.DATABASE_URL }}"
           export DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}"
           export DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}"
+          echo "Database URL: $DATABASE_URL"
 
       - name: Build with Gradle
         run: |
