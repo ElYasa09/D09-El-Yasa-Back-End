@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: myjisc-inventaris
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -25,12 +29,11 @@ jobs:
         run: |
           chmod +x inventaris/gradlew
 
-      - name: Set up environment variables
+      - name: Print environment variables
         run: |
-          export DATABASE_URL="$DATABASE_URL"
-          export DATABASE_USERNAME="$DATABASE_USERNAME"
-          export DATABASE_PASSWORD="$DATABASE_PASSWORD"
           echo "Database URL: $DATABASE_URL"
+          echo "Database Username: $DATABASE_USERNAME"
+          echo "Database Password: $DATABASE_PASSWORD"
 
       - name: Build with Gradle
         run: |
