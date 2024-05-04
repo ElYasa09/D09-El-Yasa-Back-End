@@ -1,6 +1,6 @@
 package com.myjisc.inventaris.repository;
 
-import java.util.List;
+// import java.util.List;
 import java.util.UUID;
 
 import jakarta.transaction.Transactional;

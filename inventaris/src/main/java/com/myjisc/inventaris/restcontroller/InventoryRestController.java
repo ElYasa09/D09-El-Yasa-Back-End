@@ -29,6 +29,8 @@ import com.myjisc.inventaris.dto.InventoryRequestMapper;
 import com.myjisc.inventaris.dto.request.CreateInventoryRequestDTO;
 import com.myjisc.inventaris.dto.request.UpdateInventoryRequestDTO;
 import com.myjisc.inventaris.model.Inventory;
+import com.myjisc.inventaris.model.InventoryRequest;
+import com.myjisc.inventaris.model.NotifMessage;
 import com.myjisc.inventaris.service.InventoryRestService;
 
 import jakarta.validation.Valid;
@@ -282,8 +284,200 @@ public class InventoryRestController {
         }
     }
 
-    // TODO : 1. bikin contoller get buat all list request peminjaman yang ada
-    // 2. Detail request peminjaman
-    // 3. Delete mapping bikin juga. hard delete aja
+    @GetMapping("/borrow/view-all")
+    public ResponseEntity<?> viewAllRequest() {
+        try {
+            List<InventoryRequest> listRequest = inventoryRequestService.retrieveAllRequest();
 
+            if (listRequest.isEmpty() || listRequest == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Data not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+
+            List<Map<String, Object>> inventoryRequestDataList = new ArrayList<>();
+            for (InventoryRequest inventoryRequest : listRequest) {
+                Map<String, Object> inventoryRequestData = new HashMap<>();
+                inventoryRequestData.put("idRequest", inventoryRequest.getIdRequest());
+                inventoryRequestData.put("idPeminjam", inventoryRequest.getIdPeminjam());
+                inventoryRequestData.put("requestDate", inventoryRequest.getRequestDate());
+                inventoryRequestData.put("returnDate", inventoryRequest.getReturnDate());
+                inventoryRequestData.put("status", inventoryRequest.getStatus());
+                inventoryRequestData.put("listIdItem", inventoryRequest.getListIdItem());
+                inventoryRequestData.put("listQuantityItem", inventoryRequest.getListQuantityItem());
+
+                inventoryRequestDataList.add(inventoryRequestData);
+            }
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", inventoryRequestDataList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Unable communicate with database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+    @GetMapping("/borrow/{idRequest}")
+    public ResponseEntity<?> viewRequest(@PathVariable("idRequest") String idRequest) {
+        try {
+            var request = inventoryRequestService.getRequestById(UUID.fromString(idRequest));
+
+            if (request == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Request not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+
+            Map<String, Object> data = new HashMap<>();
+
+            data.put("idRequest", request.getIdRequest());
+            data.put("idPeminjam", request.getIdPeminjam());
+            data.put("requestDate", request.getRequestDate());
+            data.put("returnDate", request.getReturnDate());
+            data.put("status", request.getStatus());
+            data.put("listIdItem", request.getListIdItem());
+            data.put("listQuantityItem", request.getListQuantityItem());
+
+            responseBody.put("data", data);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+    // notes: decrement
+    @DeleteMapping("/borrow/delete/{idRequest}")
+    public ResponseEntity<?> deleteRequest(@PathVariable("idRequest") String idRequest) {
+        try {            
+            var request = inventoryRequestService.getRequestById(UUID.fromString(idRequest));
+
+            if (request == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Request not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+            request.getListIdItem().forEach(idItem -> {
+                var quantityBorrowed = request.getListQuantityItem().get(request.getListIdItem().indexOf(idItem));
+                inventoryRestService.decrementQuantityBorrowed(idItem, quantityBorrowed);;
+            });
+
+            inventoryRequestService.deleteRequest(UUID.fromString(idRequest));
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Request has been deleted");
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+    // notes: increment dan message
+    @PostMapping("/borrow/confirm/{idRequest}")
+    public ResponseEntity<?> confirmRequest(@PathVariable("idRequest") String idRequest) {
+        try {
+            var request = inventoryRequestService.getRequestById(UUID.fromString(idRequest));
+
+            if (request == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Request not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+            request.getListIdItem().forEach(idItem -> {
+                var quantityBorrowed = request.getListQuantityItem().get(request.getListIdItem().indexOf(idItem));
+                inventoryRestService.incrementQuantityBorrowed(idItem, quantityBorrowed);
+            });
+
+            request.setStatus("CONFIRMED");
+            inventoryRequestService.updateRequest(request);
+
+            inventoryRequestService.confirmedNotifMessage(request.getIdPeminjam());
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Request has been confirmed");
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+    // notes: message
+    @PostMapping("/borrow/decline/{idRequest}")
+    public ResponseEntity<?> declineRequest(@PathVariable("idRequest") String idRequest) {
+        try {
+            var request = inventoryRequestService.getRequestById(UUID.fromString(idRequest));
+
+            if (request == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Request not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+
+            request.setStatus("DECLINED");
+            inventoryRequestService.updateRequest(request);
+
+            inventoryRequestService.declinedNotifMessage(request.getIdPeminjam());
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", "Request has been declined");
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Something went wrong");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
+
+    @GetMapping("/notif-message/{idPeminjam}")
+    public ResponseEntity<?> viewAllNotifMessage(@PathVariable("idPeminjam") String idPeminjam) {
+        try {
+            List<NotifMessage> listNotifMessage = inventoryRequestService
+                    .retrieveAllNotifMessageByIdPeminjam(UUID.fromString(idPeminjam));
+
+            if (listNotifMessage.isEmpty() || listNotifMessage == null) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("message", "Data not found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            }
+
+            List<Map<String, Object>> notifMessageDataList = new ArrayList<>();
+            for (NotifMessage notifMessage : listNotifMessage) {
+                Map<String, Object> notifMessageData = new HashMap<>();
+                notifMessageData.put("idNotif", notifMessage.getIdNotif());
+                notifMessageData.put("peminjam", notifMessage.getIdPeminjam());
+                notifMessageData.put("message", notifMessage.getMessage());
+
+                notifMessageDataList.add(notifMessageData);
+            }
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "success");
+            responseBody.put("data", notifMessageDataList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "Unable communicate with database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        }
+    }
 }
