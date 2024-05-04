@@ -32,7 +32,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd berita
-          ./gradlew build --stacktrace --info
+          ./gradlew build --info
 
       - name: Deploy to Heroku
         run: |
