@@ -23,10 +23,16 @@ jobs:
         run: |
           chmod +x inventaris/gradlew
 
+          - name: Set up environment variables
+          run: |
+            export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+            export DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}"
+            export DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}"
+
       - name: Build with Gradle
         run: |
           cd inventaris
-          ./gradlew build --stacktrace
+          ./gradlew build --scan
 
       - name: Deploy to Heroku
         run: |
