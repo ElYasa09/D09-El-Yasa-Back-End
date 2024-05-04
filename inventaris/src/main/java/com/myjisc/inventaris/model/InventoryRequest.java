@@ -22,7 +22,8 @@ public class InventoryRequest {
     @Id
     private UUID idRequest = UUID.randomUUID();
 
-    @Id
+    @NotNull
+    @Column(name = "id_peminjam", nullable = false)
     private UUID idSiswa = UUID.randomUUID();
 
     @NotNull

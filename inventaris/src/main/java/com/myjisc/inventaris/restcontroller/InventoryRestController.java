@@ -246,36 +246,48 @@ public class InventoryRestController {
     }
 
     @PostMapping("/borrow")
-    public ResponseEntity<?> createAndBorrowRequest(@RequestBody CreateRequestPeminjamanDTO inventoryRequestDTO) {
+    public ResponseEntity<?> createAndBorrowRequest(
+            @Valid @RequestBody @ModelAttribute CreateRequestPeminjamanDTO inventoryRequestDTO,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "fail");
+
+            responseBody.put("message:", "Something went wrong!");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        }
+
         try {
             // Create the inventory request
             InventoryRequest inventoryRequest = inventoryRequestService.createRequest(inventoryRequestDTO);
-    
+
             // Borrow the items
             for (int i = 0; i < inventoryRequestDTO.getListIdItem().size(); i++) {
                 UUID idItem = inventoryRequestDTO.getListIdItem().get(i);
                 Long quantity = inventoryRequestDTO.getListQuantityItem().get(i);
-    
+
                 var item = inventoryRestService.getItemByIdItem(idItem);
-    
+
                 if (item == null) {
                     Map<String, Object> responseBody = new HashMap<>();
                     responseBody.put("message", "Item not found");
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
                 }
-    
+
                 if (item.getQuantityItem() < quantity) {
                     Map<String, Object> responseBody = new HashMap<>();
                     responseBody.put("message", "Quantity not enough");
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
                 }
-    
+
                 item.setQuantityItem(item.getQuantityItem() - quantity);
                 item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
-    
+
                 inventoryRestService.updateItem(item);
             }
-    
+
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
             responseBody.put("data", "Items have been borrowed");
@@ -287,44 +299,44 @@ public class InventoryRestController {
         }
     }
 
-   
-
-
 }
 
 // @PostMapping("/borrow")
-// public ResponseEntity<?> borrowItem(@RequestBody Map<String, Object> borrowRequest) {
-//     try {
-//         UUID idItem = UUID.fromString(borrowRequest.get("idItem").toString());
-//         Long quantity = Long.parseLong(borrowRequest.get("quantity").toString());
+// public ResponseEntity<?> borrowItem(@RequestBody Map<String, Object>
+// borrowRequest) {
+// try {
+// UUID idItem = UUID.fromString(borrowRequest.get("idItem").toString());
+// Long quantity = Long.parseLong(borrowRequest.get("quantity").toString());
 
-//         var item = inventoryRestService.getItemByIdItem(idItem);
+// var item = inventoryRestService.getItemByIdItem(idItem);
 
-//         if (item == null) {
-//             Map<String, Object> responseBody = new HashMap<>();
-//             responseBody.put("message", "Item not found");
-//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-//         }
+// if (item == null) {
+// Map<String, Object> responseBody = new HashMap<>();
+// responseBody.put("message", "Item not found");
+// return
+// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+// }
 
-//         if (item.getQuantityItem() < quantity) {
-//             Map<String, Object> responseBody = new HashMap<>();
-//             responseBody.put("message", "Quantity not enough");
-//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-//         }
+// if (item.getQuantityItem() < quantity) {
+// Map<String, Object> responseBody = new HashMap<>();
+// responseBody.put("message", "Quantity not enough");
+// return
+// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+// }
 
-//         item.setQuantityItem(item.getQuantityItem() - quantity);
-//         item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
+// item.setQuantityItem(item.getQuantityItem() - quantity);
+// item.setQuantityBorrowed(item.getQuantityBorrowed() + quantity);
 
-//         inventoryRestService.updateItem(item);
+// inventoryRestService.updateItem(item);
 
-//         Map<String, Object> responseBody = new HashMap<>();
-//         responseBody.put("status", "success");
-//         responseBody.put("data", "Item has been borrowed");
+// Map<String, Object> responseBody = new HashMap<>();
+// responseBody.put("status", "success");
+// responseBody.put("data", "Item has been borrowed");
 
-//         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-//     } catch (Exception e) {
-//         Map<String, Object> responseBody = new HashMap<>();
-//         responseBody.put("message", "Something went wrong");
-//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-//     }
-
+// return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+// } catch (Exception e) {
+// Map<String, Object> responseBody = new HashMap<>();
+// responseBody.put("message", "Something went wrong");
+// return
+// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+// }

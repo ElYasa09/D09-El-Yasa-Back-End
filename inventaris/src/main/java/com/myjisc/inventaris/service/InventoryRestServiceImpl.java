@@ -104,42 +104,14 @@ public class InventoryRestServiceImpl implements InventoryRestService {
 
             return image;
         } else {
-            throw new NoSuchObjectException("Berita Not Found");
+            throw new NoSuchObjectException("Item Not Found");
         }
     };
 
     @Override
     public InventoryRequest createRequest(CreateRequestPeminjamanDTO inventoryRequestDTO) {
-        InventoryRequest inventoryRequest = new InventoryRequest();
-        
-        inventoryRequest.setIdRequest(UUID.randomUUID());
-        inventoryRequest.setRequestDate(inventoryRequestDTO.getRequestDate());
-        inventoryRequest.setReturnDate(inventoryRequestDTO.getReturnDate());
-        inventoryRequest.setStatus(inventoryRequestDTO.getStatus());
-        inventoryRequest.setListIdItem(inventoryRequestDTO.getListIdItem());
-        inventoryRequest.setListQuantityItem(inventoryRequestDTO.getListQuantityItem());
-        
-        inventoryRequestDb.save(inventoryRequest);
+
         return inventoryRequest;
     }
 
-    // @Override
-    // public InventoryRequest createRequest(Date startDateTime, Date endDateTime, List<Long> idRequest) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'createRequest'");
-    // }
-
-
 }
-
-// @Override
-// public InventoryRequest createRequest(CreateInventoryRequestDTO inventoryRequestDTO) {
-
-//     InventoryRequest inventoryRequest = new InventoryRequest();
-    
-//     inventoryRequest.setIdRequest(UUID.randomUUID());
-//     inventoryRequest.setRequestDate(new Date(System.currentTimeMillis()));
-//     inventoryRequest.setReturnDate(new Date(System.currentTimeMillis()));
-    
-    
-// }
