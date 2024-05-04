@@ -26,7 +26,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd inventaris
-          ./gradlew build --scan
+          ./gradlew build --stacktrace
 
       - name: Deploy to Heroku
         run: |
