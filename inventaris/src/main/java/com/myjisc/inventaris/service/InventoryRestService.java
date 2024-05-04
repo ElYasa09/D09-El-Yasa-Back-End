@@ -2,6 +2,7 @@ package com.myjisc.inventaris.service;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.Date;
 import java.util.List;
 
 import java.rmi.NoSuchObjectException;
@@ -31,5 +32,5 @@ public interface InventoryRestService {
 
     byte[] getImageItem(UUID idItem) throws NoSuchObjectException;
 
-    InventoryRequest createRequest(CreateRequestPeminjamanDTO createRequestPeminjamanDTO);
+    InventoryRequest createRequest(CreateRequestPeminjamanDTO inventoryRequestDTO);
 }

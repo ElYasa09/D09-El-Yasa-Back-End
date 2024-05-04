@@ -31,6 +31,7 @@ import com.myjisc.inventaris.model.Inventory;
 import com.myjisc.inventaris.model.InventoryRequest;
 import com.myjisc.inventaris.service.InventoryRestService;
 
+
 import jakarta.validation.Valid;
 import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
@@ -249,7 +250,7 @@ public class InventoryRestController {
     public ResponseEntity<?> createAndBorrowRequest(@RequestBody CreateRequestPeminjamanDTO inventoryRequestDTO) {
         try {
             // Create the inventory request
-            InventoryRequest inventoryRequest = inventoryRequestService.createRequest(inventoryRequestDTO);
+            InventoryRequest inventoryRequest = inventoryRestService.createRequest(inventoryRequestDTO);
     
             // Borrow the items
             for (int i = 0; i < inventoryRequestDTO.getListIdItem().size(); i++) {

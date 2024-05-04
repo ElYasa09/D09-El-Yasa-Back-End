@@ -17,6 +17,7 @@ import com.myjisc.inventaris.dto.request.CreateRequestPeminjamanDTO;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -108,7 +109,6 @@ public class InventoryRestServiceImpl implements InventoryRestService {
         }
     };
 
-    @Override
     public InventoryRequest createRequest(CreateRequestPeminjamanDTO inventoryRequestDTO) {
         InventoryRequest inventoryRequest = new InventoryRequest();
         

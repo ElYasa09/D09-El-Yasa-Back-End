@@ -22,7 +22,7 @@ public class InventoryRequest {
     @Id
     private UUID idRequest = UUID.randomUUID();
 
-    @Id
+    @NotNull
     private UUID idSiswa = UUID.randomUUID();
 
     @NotNull
