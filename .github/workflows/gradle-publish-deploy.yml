@@ -8,7 +8,13 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: myjisc-kelas
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
