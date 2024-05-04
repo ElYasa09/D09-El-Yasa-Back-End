@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: myjisc-inventaris
 
     steps:
       - name: Checkout code
