@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserController {
 
     @GetMapping("/user")
-    public Map<String, String > helloWorld() {
+    public Map<String, String> helloWorld() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "This is a template");
         return response;
