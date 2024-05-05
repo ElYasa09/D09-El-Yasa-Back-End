@@ -90,7 +90,7 @@ public class KelasRestServiceImpl implements KelasRestService {
 
         if (!listExistingKelas.isEmpty()) {
             for (Kelas kelas : listExistingKelas) {
-                if (kelas.getNuptkWaliKelas() == idGuru) {
+                if (kelas.getNuptkWaliKelas().equals(idGuru)) {
                     listKelasDiajar.add(kelas);
                     break;
                 }
