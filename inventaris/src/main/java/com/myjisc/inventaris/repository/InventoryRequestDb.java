@@ -6,10 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.myjisc.inventaris.model.Inventory;
+import com.myjisc.inventaris.model.InventoryRequest;
 
-@Repository
 @Transactional
-public interface InventoryDb extends JpaRepository<Inventory, UUID> {
-    
+@Repository
+public interface InventoryRequestDb extends JpaRepository<InventoryRequest, UUID> {
 }
