@@ -44,11 +44,11 @@ public interface InventoryRestService {
 
     void decrementQuantityBorrowed(UUID idItem, Long quantityBorrowed);
 
-    void confirmedNotifMessage(UUID idPeminjam);
+    void confirmedNotifMessage(Long idPeminjam);
 
-    void declinedNotifMessage(UUID idPeminjam);
+    void declinedNotifMessage(Long idPeminjam);
 
     List<NotifMessage> retrieveAllNotifMessage();
 
-    List<NotifMessage> retrieveAllNotifMessageByIdPeminjam(UUID idPeminjam);
+    List<NotifMessage> retrieveAllNotifMessageByIdPeminjam(Long idPeminjam);
 }

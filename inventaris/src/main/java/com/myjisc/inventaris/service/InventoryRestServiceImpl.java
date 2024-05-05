@@ -163,13 +163,13 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     }
 
     @Override
-    public void incrementQuantityBorrowed(UUID idItem, Long quantityBorrowed) throws IllegalArgumentException{
+    public void incrementQuantityBorrowed(UUID idItem, Long quantityBorrowed) throws IllegalArgumentException {
         var item = getItemByIdItem(idItem);
         if (item != null) {
             if (item.getQuantityItem() >= quantityBorrowed) {
                 item.setQuantityBorrowed(item.getQuantityBorrowed() + quantityBorrowed);
                 inventoryDb.save(item);
-            } else{
+            } else {
                 throw new IllegalArgumentException("Quantity borrowed exceeds quantity item");
             }
         }
@@ -185,7 +185,7 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     }
 
     @Override
-    public void confirmedNotifMessage(UUID idPeminjam) {
+    public void confirmedNotifMessage(Long idPeminjam) {
         NotifMessage notifMessage = new NotifMessage();
         notifMessage.setIdPeminjam(idPeminjam);
         notifMessage.setMessage("Peminjaman berhasil disetujui");
@@ -193,7 +193,7 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     }
 
     @Override
-    public void declinedNotifMessage(UUID idPeminjam) {
+    public void declinedNotifMessage(Long idPeminjam) {
         NotifMessage notifMessage = new NotifMessage();
         notifMessage.setIdPeminjam(idPeminjam);
         notifMessage.setMessage("Peminjaman ditolak");
@@ -206,7 +206,7 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     }
 
     @Override
-    public List<NotifMessage> retrieveAllNotifMessageByIdPeminjam(UUID idPeminjam) {
+    public List<NotifMessage> retrieveAllNotifMessageByIdPeminjam(Long idPeminjam) {
         return notifMessageDb.findAllByIdPeminjam(idPeminjam);
     }
 }
