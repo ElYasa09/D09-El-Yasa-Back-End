@@ -355,10 +355,9 @@ public class InventoryRestController {
         }
     }
 
-    // notes: decrement
     @DeleteMapping("/borrow/delete/{idRequest}")
     public ResponseEntity<?> deleteRequest(@PathVariable("idRequest") String idRequest) {
-        try {            
+        try {
             var request = inventoryRequestService.getRequestById(UUID.fromString(idRequest));
 
             if (request == null) {
@@ -368,7 +367,8 @@ public class InventoryRestController {
             }
             request.getListIdItem().forEach(idItem -> {
                 var quantityBorrowed = request.getListQuantityItem().get(request.getListIdItem().indexOf(idItem));
-                inventoryRestService.decrementQuantityBorrowed(idItem, quantityBorrowed);;
+                inventoryRestService.decrementQuantityBorrowed(idItem, quantityBorrowed);
+                ;
             });
 
             inventoryRequestService.deleteRequest(UUID.fromString(idRequest));
@@ -385,7 +385,6 @@ public class InventoryRestController {
         }
     }
 
-    // notes: increment dan message
     @PostMapping("/borrow/confirm/{idRequest}")
     public ResponseEntity<?> confirmRequest(@PathVariable("idRequest") String idRequest) {
         try {
@@ -418,7 +417,6 @@ public class InventoryRestController {
         }
     }
 
-    // notes: message
     @PostMapping("/borrow/decline/{idRequest}")
     public ResponseEntity<?> declineRequest(@PathVariable("idRequest") String idRequest) {
         try {
