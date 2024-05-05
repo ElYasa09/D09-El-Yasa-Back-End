@@ -7,12 +7,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.rmi.NoSuchObjectException;
 
 import com.myjisc.inventaris.model.Inventory;
+import com.myjisc.inventaris.model.InventoryRequest;
+import com.myjisc.inventaris.model.NotifMessage;
 import com.myjisc.inventaris.repository.InventoryDb;
+import com.myjisc.inventaris.repository.InventoryRequestDb;
+import com.myjisc.inventaris.repository.NotifMessageDb;
 
 import jakarta.transaction.Transactional;
-
 import java.io.IOException;
 import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -23,12 +29,24 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     private InventoryDb inventoryDb;
 
     @Autowired
+    private InventoryRequestDb inventoryRequestDb;
+
+    @Autowired
     private ImageUtilService imageUtilService;
+
+    @Autowired
+    private NotifMessageDb notifMessageDb;
 
     @Override
     public Inventory createInventory(Inventory inventory, MultipartFile image) throws IOException {
         inventory.setImageItem(setRestItemImage(inventory, image));
         inventory.setQuantityBorrowed(Long.valueOf(0));
+        inventoryDb.save(inventory);
+        return inventory;
+    }
+
+    @Override
+    public Inventory saveInventory(Inventory inventory) {
         inventoryDb.save(inventory);
         return inventory;
     }
@@ -97,7 +115,98 @@ public class InventoryRestServiceImpl implements InventoryRestService {
 
             return image;
         } else {
-            throw new NoSuchObjectException("Berita Not Found");
+            throw new NoSuchObjectException("Item Not Found");
         }
     };
+
+    @Override
+    public InventoryRequest createRequest(InventoryRequest inventoryRequest) {
+        var timeNow = LocalDateTime.now();
+        inventoryRequest.setRequestDate(Date.from(timeNow.atZone(ZoneId.systemDefault()).toInstant()));
+        inventoryRequest.setStatus("PENDING");
+        inventoryRequestDb.save(inventoryRequest);
+        return inventoryRequest;
+    }
+
+    @Override
+    public List<InventoryRequest> retrieveAllRequest() {
+        return inventoryRequestDb.findAll();
+    }
+
+    @Override
+    public InventoryRequest getRequestById(UUID idRequest) {
+        for (InventoryRequest request : retrieveAllRequest()) {
+            if (request.getIdRequest().equals(idRequest)) {
+                return request;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public InventoryRequest updateRequest(InventoryRequest inventoryRequest) {
+        var request = getRequestById(inventoryRequest.getIdRequest());
+        if (request != null) {
+            request.setStatus(inventoryRequest.getStatus());
+            inventoryRequestDb.save(request);
+            return request;
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteRequest(UUID idRequest) {
+        var request = getRequestById(idRequest);
+        if (request != null) {
+            inventoryRequestDb.delete(request);
+        }
+    }
+
+    @Override
+    public void incrementQuantityBorrowed(UUID idItem, Long quantityBorrowed) throws IllegalArgumentException{
+        var item = getItemByIdItem(idItem);
+        if (item != null) {
+            if (item.getQuantityItem() >= quantityBorrowed) {
+                item.setQuantityBorrowed(item.getQuantityBorrowed() + quantityBorrowed);
+                inventoryDb.save(item);
+            } else{
+                throw new IllegalArgumentException("Quantity borrowed exceeds quantity item");
+            }
+        }
+    }
+
+    @Override
+    public void decrementQuantityBorrowed(UUID idItem, Long quantityBorrowed) {
+        var item = getItemByIdItem(idItem);
+        if (item != null) {
+            item.setQuantityBorrowed(item.getQuantityBorrowed() - quantityBorrowed);
+            inventoryDb.save(item);
+        }
+    }
+
+    @Override
+    public void confirmedNotifMessage(UUID idPeminjam) {
+        NotifMessage notifMessage = new NotifMessage();
+        notifMessage.setIdPeminjam(idPeminjam);
+        notifMessage.setMessage("Peminjaman berhasil disetujui");
+        notifMessageDb.save(notifMessage);
+    }
+
+    @Override
+    public void declinedNotifMessage(UUID idPeminjam) {
+        NotifMessage notifMessage = new NotifMessage();
+        notifMessage.setIdPeminjam(idPeminjam);
+        notifMessage.setMessage("Peminjaman ditolak");
+        notifMessageDb.save(notifMessage);
+    }
+
+    @Override
+    public List<NotifMessage> retrieveAllNotifMessage() {
+        return notifMessageDb.findAll();
+    }
+
+    @Override
+    public List<NotifMessage> retrieveAllNotifMessageByIdPeminjam(UUID idPeminjam) {
+        return notifMessageDb.findAllByIdPeminjam(idPeminjam);
+    }
 }
