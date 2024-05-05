@@ -20,7 +20,7 @@ public class NotifMessage {
 
     @NotNull
     @Column(name = "id_peminjam", nullable = false)
-    private UUID idPeminjam;
+    private Long idPeminjam;
 
     @NotNull
     @Column(name = "message", nullable = false)

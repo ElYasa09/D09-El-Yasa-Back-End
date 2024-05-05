@@ -13,9 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class CreateRequestPeminjamanDTO {
-    private UUID idPeminjam;
+    private Long idPeminjam;
     private Date returnDate;
     private List<UUID> listIdItem;
     private List<Long> listQuantityItem;
-
+    private String keperluanPeminjaman;
 }

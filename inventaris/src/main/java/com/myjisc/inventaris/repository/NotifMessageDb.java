@@ -11,7 +11,7 @@ import com.myjisc.inventaris.model.NotifMessage;
 
 @Repository
 @Transactional
-public interface NotifMessageDb extends JpaRepository<NotifMessage, UUID>{
-    List<NotifMessage> findAllByIdPeminjam(UUID idPeminjam);
+public interface NotifMessageDb extends JpaRepository<NotifMessage, UUID> {
+    List<NotifMessage> findAllByIdPeminjam(Long idPeminjam);
 
 }

@@ -305,6 +305,7 @@ public class InventoryRestController {
                 inventoryRequestData.put("status", inventoryRequest.getStatus());
                 inventoryRequestData.put("listIdItem", inventoryRequest.getListIdItem());
                 inventoryRequestData.put("listQuantityItem", inventoryRequest.getListQuantityItem());
+                inventoryRequestData.put("keperluanPeminjaman", inventoryRequest.getKeperluanPeminjaman());
 
                 inventoryRequestDataList.add(inventoryRequestData);
             }
@@ -344,6 +345,7 @@ public class InventoryRestController {
             data.put("status", request.getStatus());
             data.put("listIdItem", request.getListIdItem());
             data.put("listQuantityItem", request.getListQuantityItem());
+            data.put("keperluanPeminjaman", request.getKeperluanPeminjaman());
 
             responseBody.put("data", data);
 
@@ -446,10 +448,10 @@ public class InventoryRestController {
     }
 
     @GetMapping("/notif-message/{idPeminjam}")
-    public ResponseEntity<?> viewAllNotifMessage(@PathVariable("idPeminjam") String idPeminjam) {
+    public ResponseEntity<?> viewAllNotifMessage(@PathVariable("idPeminjam") Long idPeminjam) {
         try {
             List<NotifMessage> listNotifMessage = inventoryRequestService
-                    .retrieveAllNotifMessageByIdPeminjam(UUID.fromString(idPeminjam));
+                    .retrieveAllNotifMessageByIdPeminjam(idPeminjam);
 
             if (listNotifMessage.isEmpty() || listNotifMessage == null) {
                 Map<String, Object> responseBody = new HashMap<>();
