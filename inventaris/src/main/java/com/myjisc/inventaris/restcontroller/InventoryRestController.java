@@ -405,7 +405,7 @@ public class InventoryRestController {
             request.setStatus("CONFIRMED");
             inventoryRequestService.updateRequest(request);
 
-            inventoryRequestService.confirmedNotifMessage(request.getIdPeminjam());
+            inventoryRequestService.confirmedNotifMessage(request.getIdPeminjam(), UUID.fromString(idRequest));
 
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
@@ -433,7 +433,7 @@ public class InventoryRestController {
             request.setStatus("DECLINED");
             inventoryRequestService.updateRequest(request);
 
-            inventoryRequestService.declinedNotifMessage(request.getIdPeminjam());
+            inventoryRequestService.declinedNotifMessage(request.getIdPeminjam(), UUID.fromString(idRequest));
 
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("status", "success");
