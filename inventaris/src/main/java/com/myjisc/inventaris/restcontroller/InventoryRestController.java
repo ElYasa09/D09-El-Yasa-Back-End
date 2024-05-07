@@ -463,6 +463,7 @@ public class InventoryRestController {
             for (NotifMessage notifMessage : listNotifMessage) {
                 Map<String, Object> notifMessageData = new HashMap<>();
                 notifMessageData.put("idNotif", notifMessage.getIdNotif());
+                notifMessageData.put("idRequest", notifMessage.getIdRequest());
                 notifMessageData.put("peminjam", notifMessage.getIdPeminjam());
                 notifMessageData.put("message", notifMessage.getMessage());
 
