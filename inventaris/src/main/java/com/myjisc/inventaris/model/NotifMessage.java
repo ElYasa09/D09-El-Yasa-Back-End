@@ -25,4 +25,8 @@ public class NotifMessage {
     @NotNull
     @Column(name = "message", nullable = false)
     private String message;
+
+    @NotNull
+    @Column(name = "id_request", nullable = false)
+    private UUID idRequest;
 }

@@ -44,9 +44,9 @@ public interface InventoryRestService {
 
     void decrementQuantityBorrowed(UUID idItem, Long quantityBorrowed);
 
-    void confirmedNotifMessage(Long idPeminjam);
+    void confirmedNotifMessage(Long idPeminjam, UUID idRequest);
 
-    void declinedNotifMessage(Long idPeminjam);
+    void declinedNotifMessage(Long idPeminjam, UUID idRequest);
 
     List<NotifMessage> retrieveAllNotifMessage();
 
