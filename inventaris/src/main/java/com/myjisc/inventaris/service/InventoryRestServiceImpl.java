@@ -188,6 +188,7 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     public void confirmedNotifMessage(Long idPeminjam, UUID idRequest) {
         NotifMessage notifMessage = new NotifMessage();
         notifMessage.setIdPeminjam(idPeminjam);
+        notifMessage.setIdRequest(idRequest);
         notifMessage.setMessage("Peminjaman berhasil disetujui");
         notifMessageDb.save(notifMessage);
     }
@@ -196,6 +197,7 @@ public class InventoryRestServiceImpl implements InventoryRestService {
     public void declinedNotifMessage(Long idPeminjam, UUID idRequest) {
         NotifMessage notifMessage = new NotifMessage();
         notifMessage.setIdPeminjam(idPeminjam);
+        notifMessage.setIdRequest(idRequest);
         notifMessage.setMessage("Peminjaman ditolak");
         notifMessageDb.save(notifMessage);
     }
