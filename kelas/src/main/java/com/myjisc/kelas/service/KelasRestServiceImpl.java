@@ -21,7 +21,6 @@ public class KelasRestServiceImpl implements KelasRestService {
     @Autowired
     private KelasDb kelasDb;
 
-
     @Override
     public Kelas createRestKelas(Kelas kelas) {
         kelasDb.save(kelas);
@@ -44,22 +43,22 @@ public class KelasRestServiceImpl implements KelasRestService {
             return kelas;
         }
     }
-    
+
     @Override
     public List<Kelas> retrieveRestAllKelas() {
         return kelasDb.findAll();
     }
-    
+
     @Override
     public List<Kelas> retrieveRestAvailableKelas() {
         return kelasDb.findByIsDeletedFalse();
     }
-    
+
     @Override
     public Kelas getRestKelasByIdKelas(UUID idKelas) {
         return kelasDb.findByIdKelasAndIsDeletedFalse(idKelas);
     }
-    
+
     @Override
     public void deleteRestKelas(UUID idKelas) throws NoSuchObjectException {
         var kelas = kelasDb.findByIdKelasAndIsDeletedFalse(idKelas);
@@ -70,7 +69,7 @@ public class KelasRestServiceImpl implements KelasRestService {
             kelasDb.save(kelas);
         }
     }
-    
+
     @Override
     public Kelas getRestKelasByIdSiswa(Long idSiswa) {
         List<Kelas> listKelasExisting = kelasDb.findByIsDeletedFalse();
@@ -88,19 +87,30 @@ public class KelasRestServiceImpl implements KelasRestService {
     public List<Kelas> getRestKelasByIdGuru(Long idGuru) {
         List<Kelas> listExistingKelas = kelasDb.findByIsDeletedFalse();
         List<Kelas> listKelasDiajar = new ArrayList<>();
-        
+
+        if (!listExistingKelas.isEmpty()) {
+            for (Kelas kelas : listExistingKelas) {
+                if (kelas.getNuptkWaliKelas().equals(idGuru)) {
+                    listKelasDiajar.add(kelas);
+                    break;
+                }
+            }
+        }
+
         if (!listExistingKelas.isEmpty()) {
             for (Kelas kelas : listExistingKelas) {
                 List<MataPelajaran> mataPelajaranList = kelas.getListMataPelajaran();
                 for (MataPelajaran mataPelajaran : mataPelajaranList) {
                     if (mataPelajaran.getNuptkGuruMengajar().equals(idGuru)) {
-                        listKelasDiajar.add(kelas);
-                        break; // No need to continue searching for this class
+                        if (!listKelasDiajar.contains(kelas)) {
+                            listKelasDiajar.add(kelas);
+                        }
+                        break;
                     }
                 }
             }
         }
-        
+
         return listKelasDiajar;
     }
 }
