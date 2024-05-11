@@ -1,1 +1,1 @@
-web: sh -c "cd kelas && chmod +x gradlew && ./gradlew build && java -jar -Dserver.port=8087 build/libs/kelas-0.0.1-SNAPSHOT.jar"
+web: sh -c "cd kelas && chmod +x gradlew && ./gradlew build && java -jar build/libs/kelas-0.0.1-SNAPSHOT.jar"
