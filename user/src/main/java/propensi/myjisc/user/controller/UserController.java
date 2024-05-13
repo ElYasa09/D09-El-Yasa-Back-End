@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/user")
     public ResponseEntity<UserResponseDTO> getUserDetails(@RequestParam String email) {
         try {
@@ -69,6 +73,8 @@ public class UserController {
                 // Update user properties
                 user.setFirstname(editRequest.getFirstname());
                 user.setLastname(editRequest.getLastname());
+                user.setUsername(editRequest.getUsername());
+                user.setPassword(passwordEncoder.encode(editRequest.getPassword())); // update password
 
                 userRepository.save(user);
                 return ResponseEntity.ok().build();
