@@ -38,7 +38,7 @@ public class ArtikelRestController {
         if (listArtikel.isEmpty()) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("message", "Data not found");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
         }
 
         try {
