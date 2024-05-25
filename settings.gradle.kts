@@ -6,4 +6,4 @@
  */
 
 rootProject.name = "D09-El-Yasa-Back-End"
-include 'user'
+include(":user")
