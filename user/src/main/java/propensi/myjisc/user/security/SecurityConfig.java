@@ -110,6 +110,12 @@ public class SecurityConfig {
         return Arrays.stream(paths)
                 .map(AntPathRequestMatcher::new)
                 .toArray(RequestMatcher[]::new);
+
+    }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
 

@@ -17,11 +17,13 @@ import jakarta.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class EditUserRequestDTO {
 
-    @NotBlank(message = "Nama required")
     String firstname;
 
-    @NotBlank(message = "Nama required")
     String lastname;
+
+    String username;
+
+    private String password;
 
 
 }
