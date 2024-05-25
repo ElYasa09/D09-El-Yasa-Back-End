@@ -8,6 +8,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret99
+    env_file:
+      - user/.env-user
     volumes:
       - db:/var/lib/postgresql/data
 volumes:
